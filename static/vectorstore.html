@@ -259,6 +259,29 @@
 					let selectSource = document.getElementById('selectSource'); // replace 'modelType' with the id of your selectSource element
 					populateSelectBox(selectSource, data.vectorstores);
 				});
+
+				// Define an array of placeholder texts
+				let placeholders = [
+					"Can you provide a React code sample to render a form?",
+					"Can you provide a Vanilla JS code sample to render a feedback survey form?",
+					"How do I get started with Form.io?",
+					"What are the latest features and improvements in Form.io?",
+					"How can I deploy the Form.io platform within my own environment?",
+					"Where can I find detailed documentation on the platform's features and functionalities?",
+					"Are there any common questions and error messages that I should be aware of?",
+					"Where can I find examples and tutorials for using Form.io?",
+					"Is there a community on Github that I can join?",
+					"How can I find out the pricing options and modules available for Form.io?",
+					"What should I do if I need help or support?",
+					"Can you give me a brief overview of how Form.io works?"
+						// ... add as many as you want
+				];
+				
+				// Choose a random placeholder
+				let placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+				
+				// Set the placeholder
+				document.getElementById('userInput').value = placeholder;
 			});
 		</script>
 	</body>

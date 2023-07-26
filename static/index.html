@@ -179,6 +179,23 @@
 				// Set the value of the textarea
 				document.getElementById('systemMessage').value = systemMessage;
 				document.getElementById('modelType').value = modelType;
+
+				// Define an array of placeholder texts
+				let placeholders = [
+					"Can you generate a Express JS server example with CRUD routes?",
+					"What is the significance of market capitalization in evaluating a company's worth?",
+					"Going step by step list the instructions for setting up FastAPI on docker-compose.",
+					"Who won the 2001 world series?",
+					"What is the best way to learn a new programming language?",
+					"Teach me how to assess a rental properties value.",
+						// ... add as many as you want
+				];
+				
+				// Choose a random placeholder
+				let placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+				
+				// Set the placeholder
+				document.getElementById('userInput').value = placeholder;
 			});
 
 			function sendChatMessage(messages, sessionID, userInput, chatbox) {

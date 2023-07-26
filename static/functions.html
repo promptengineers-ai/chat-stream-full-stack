@@ -175,6 +175,27 @@
 				// Set the value of the textarea
 				document.getElementById('systemMessage').value = systemMessage;
 				document.getElementById('modelType').value = modelType;
+
+				// Define an array of placeholder texts
+				let placeholders = [
+					"What's the current trading price of Bitcoin, Ethereum, and Binance Coin?",
+					"Can you provide the week's weather forecast for London?",
+					"How is Apple's stock performing in the market today?",
+					"What's the weather prediction for Rio de Janeiro for the coming weekend?",
+					"Could you update me on the latest market trends for Amazon's stock?",
+					"What's the current temperature in Berlin?",
+					"What's the latest news regarding the price fluctuations of Tesla's stock?",
+					"What's the weather like in Moscow right now, and what's expected for the next few days?",
+					"Can you provide an update on the performance of Alphabet Inc.'s stock this week?",
+					"How are Cardano, Polkadot, and Ripple currently valued in the crypto market?",
+						// ... add as many as you want
+				];
+				
+				// Choose a random placeholder
+				let placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+				
+				// Set the placeholder
+				document.getElementById('userInput').value = placeholder;
 			});
 
 			function sendChatMessage(messages, sessionID, userInput, chatbox) {

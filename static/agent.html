@@ -175,6 +175,21 @@
 				// Set the value of the textarea
 				document.getElementById('systemMessage').value = systemMessage;
 				document.getElementById('modelType').value = modelType;
+
+				// Define an array of placeholder texts
+				let placeholders = [
+					"Who is the current president of New Zealand?",
+					"What are the most promising AI technologies of 2023?",
+					"Who won the Oscar for Best Actor in 2023?",
+					"Where would be the best place to go on vacation in 2023?",
+						// ... add as many as you want
+				];
+				
+				// Choose a random placeholder
+				let placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+				
+				// Set the placeholder
+				document.getElementById('userInput').value = placeholder;
 			});
 
 			function sendChatMessage(messages, sessionID, userInput, chatbox) {
