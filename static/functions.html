@@ -146,11 +146,13 @@
 									placeholder="Type your message here..." 
 								></textarea>
 								<button 
+									id="sendButton"
 									type="submit" 
 									class="btn btn-primary" 
 									style="background-color: #5E35B1; border-color: #5E35B1;"
 								>
-									<i class="fa fa-paper-plane"></i>
+									<i id="sendIcon" class="fa fa-paper-plane"></i>
+									<div id="spinner" class="spinner-border spinner-border-sm text-light" role="status" style="display: none;"></div>
 								</button>
 							</div>
 						</div>
@@ -199,6 +201,11 @@
 			});
 
 			function sendChatMessage(messages, sessionID, userInput, chatbox) {
+				// Show the spinner and hide the send icon
+				document.getElementById('spinner').style.display = 'block';
+				document.getElementById('sendIcon').style.display = 'none';
+				document.getElementById('sendButton').disabled = true;
+
 				// Get the system message and model type from localStorage
 				let modelType = localStorage.getItem('modelType') || 'gpt-3.5-turbo';
 				let systemMessage = localStorage.getItem('systemMessage') || 'You are a helpful assistant.';
