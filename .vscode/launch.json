@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Remote Attach",
+      "type": "python",
+      "request": "attach",
+      "justMyCode": false,
+      "connect": {
+        "port": 5678,
+        "host": "0.0.0.0"
+      },
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/src",
+          "remoteRoot": "/app/src"
+        }
+      ]
+    },
+    {
+      "name": "Python: FastAPIv2",
+      "type": "python",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+          "main:app",
+          "--log-level",
+          "debug"
+      ],
+      "jinja": true,
+      "justMyCode": true,
+      "envFile": "${workspaceFolder}/.env.local"
+    }
+  ]
+}

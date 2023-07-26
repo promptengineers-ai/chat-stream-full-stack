@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  # API
+  chatbot-api:
+    container_name: chatbot-api
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env.local
+    command: uvicorn main:app --host 0.0.0.0 --reload
+    volumes:
+      - ./:/app
+    ports:
+      - 8000:8000
+      - 5678:5678

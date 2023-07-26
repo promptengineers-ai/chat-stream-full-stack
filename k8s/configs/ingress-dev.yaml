@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pe-oss-server
+  namespace: pe-oss-dev
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "route"
+    nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
+    nginx.ingress.kubernetes.io/affinity-mode: "persistent"
+    nginx.ingress.kubernetes.io/websocket-services: "server"  # add this line if your service requires websockets
+spec:
+  rules:
+  - host: oss.promptengineers.ai
+    http:
+      paths:
+      - backend:
+          service:
+            name: server
+            port:
+              number: 8000
+        path: /
+        pathType: Prefix

@@ -1,0 +1,67 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: server
+  annotations:
+    rollme: {{ randAlphaNum 5 | quote }}
+  labels:
+    app: server
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: server
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      imagePullSecrets:
+      {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      containers:
+      - name: server
+        command: ["uvicorn"]
+        imagePullPolicy: IfNotPresent
+        args: ["main:app", "--port=8000", "--host", "0.0.0.0"]
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports:
+          - containerPort: 8000
+        resources:
+          requests:
+            cpu: 250m
+            memory: 128Mi
+          limits:
+            cpu: 1
+            memory: 512Mi
+        env:
+          - name: APP_DEBUG
+            value: "false"
+          - name: APP_URL
+            value : https://oss.promptengineers.ai
+          - name: APP_NAME
+            value : "Prompt Engineers OSS"
+          - name: APP_ENV
+            value : {{ .Values.appEnv }}
+          - name: APP_VERSION
+            value : {{ .Values.appVersion | quote}}
+          - name: PROMPTLAYER_API_KEY
+            value : {{ .Values.promptLayerApiKey }}
+          - name: OPENAI_API_KEY
+            value : {{ .Values.openAiApiKey }}
+          - name: GOOGLE_CSE_ID
+            value : {{ .Values.googleCseId }}
+          - name: GOOGLE_API_KEY
+            value : {{ .Values.googleApiKey }}
+          - name: SERPAPI_API_KEY
+            value : {{ .Values.SerpapiApiKey }}
+          - name: WEATHER_API_KEY
+            value : {{ .Values.WeatherApiKey }}
+          - name: YAHOOFINANCE_API_KEY
+            value : {{ .Values.YahooFinanceApiKey }}
+          - name: S3_ACCESS_KEY
+            value : {{ .Values.s3AccessKey }}
+          - name: S3_SECRET_KEY
+            value : {{ .Values.s3SecretKey }}
+          - name: S3_BUCKET_NAME
+            value : {{ .Values.s3BucketName }}
+          

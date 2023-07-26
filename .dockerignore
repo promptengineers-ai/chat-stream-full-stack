@@ -1,0 +1,37 @@
+# Ignore Python cache files
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache
+
+# Ignore virtual environment directories
+env
+.venv
+requirements-dev.txt
+
+# Ignore log files and databases
+*.log
+*.sql
+*.sqlite
+
+# Ignore Git related files
+.git
+.gitignore
+
+# Ignore Docker related files
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Ignore environment files
+.env*
+.example.env
+
+# Ignore scripts directory
+scripts
+tests
+k8s
+README.md
+ChangeLog.md
