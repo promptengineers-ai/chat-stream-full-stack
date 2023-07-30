@@ -220,6 +220,10 @@
 						messages: messages, 
 						model: modelType,
 						temperature: 0.9,
+						functions: [
+							"get_current_weather",
+							"get_latest_crypto_price"
+						]
 					}),
 				}).then(response => {
 					console.log('Server Response:', response);
