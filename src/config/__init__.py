@@ -10,6 +10,8 @@ GOOGLE_CSE_ID = os.getenv("GOOGLE_CSE_ID", '')
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", '')
 WEATHER_API_KEY = os.getenv("WEATHER_API_KEY", '')
 YAHOOFINANCE_API_KEY = os.getenv("YAHOOFINANCE_API_KEY", '')
+ALPACA_API_KEY = os.getenv("ALPACA_API_KEY", '')
+ALPACA_SECRET_KEY = os.getenv("ALPACA_SECRET_KEY", '')
 
 # S3 Credentials
 S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY", '')

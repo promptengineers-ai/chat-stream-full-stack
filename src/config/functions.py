@@ -1,11 +1,13 @@
 """Functions configuration file."""
 
 from src.utils.functions.crypto import get_latest_crypto_price
+from src.utils.functions.markets import get_latest_market_news
 from src.utils.functions.weather import get_current_weather
 
 AVAILABLE_FUNCTIONS = {
 		"get_current_weather": get_current_weather,
-		"get_latest_crypto_price": get_latest_crypto_price
+		"get_latest_crypto_price": get_latest_crypto_price,
+  	"get_latest_market_news": get_latest_market_news
 }
 
 FUNCTIONS = [
@@ -36,6 +38,19 @@ FUNCTIONS = [
 				}
 			},
 			"required": ["symbols"],
+		},
+	},
+  {
+		"name": "get_latest_market_news",
+		"description": "Get the latest market news from given symbol or list of symbols",
+		"parameters": {
+			"type": "object",
+			"properties": {
+				"symbols": {
+					"type": "string",
+					"description": "The symbol or list of symbols for cryptocurrencies, e.g. BTCUSD | AAPL,ETHUSD | MATICUSD,MSFT",
+				}
+			}
 		},
 	}
 ]

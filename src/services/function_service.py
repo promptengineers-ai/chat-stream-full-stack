@@ -20,4 +20,10 @@ class FunctionTypeFactory:
             return function_to_call(
 			    symbols=function_args.get("symbols")
 			)
+            
+        if fn_type == "get_latest_market_news":
+            function_to_call = AVAILABLE_FUNCTIONS[fn_type]
+            return function_to_call(
+			    symbols=function_args.get("symbols", '')
+			)
         raise ValueError("Invalid Function type.")
