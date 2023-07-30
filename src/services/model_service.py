@@ -7,6 +7,7 @@ from langchain.chat_models import ChatOpenAI
 from src.config import OPENAI_API_KEY
 from src.config.functions import FUNCTIONS
 from src.services.function_service import FunctionTypeFactory
+from src.utils import match_strings
 
 os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
 
@@ -53,12 +54,13 @@ def openai_chat_functions_model(
     streaming: bool = False,
     temperature: float or int = 0.9,
 	messages: list or None = None,
+    keys: list or None = None,
 ):
     """Query OpenAI API for a chat model."""
     call_fn = openai_chat_model(
 		model_name=model_name,
         messages=messages,
-        functions=FUNCTIONS,
+        functions=match_strings(keys, FUNCTIONS),
         function_call="auto",
 	)
     response_message = call_fn["choices"][0]["message"]

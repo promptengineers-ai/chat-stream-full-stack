@@ -32,6 +32,10 @@ function readMessage(reader, userInput, assistantMessageDiv, chatbox) {
 				appendMessage(accumulator, assistantMessageDiv, chatbox);
 				userInput.focus();
 			}
+			// hide the spinner and show the send icon when the stream is done
+			document.getElementById('spinner').style.display = 'none';
+			document.getElementById('sendIcon').style.display = 'block';
+			document.getElementById('sendButton').disabled = false;
 			return;
 		}
 

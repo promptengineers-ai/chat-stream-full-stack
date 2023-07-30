@@ -114,6 +114,7 @@ async def send_functions_message(
     messages,
     model:str,
     temperature: float or int = 0.9,
+    functions: list[str] = [],
 ) -> AsyncIterable[str]:
     """Send a message to the chatbot and yield the response."""
     response = openai_chat_functions_model(
@@ -121,6 +122,7 @@ async def send_functions_message(
         model_name=model,
         temperature=temperature,
         streaming=True,
+        keys=functions,
     )
     for chunk in response:
         token = chunk['choices'][0]['delta'].get('content', '')

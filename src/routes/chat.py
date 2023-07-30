@@ -6,7 +6,8 @@ from fastapi.responses import StreamingResponse
 
 from src.config import S3_ACCESS_KEY, S3_BUCKET_NAME, S3_SECRET_KEY
 from src.config.test import TEST_USER_ID
-from src.models.message import Message, VectorstoreChatMessage
+from src.models.message import (FunctionChatMessage, Message,
+                                VectorstoreChatMessage)
 from src.services.logging_service import logger
 from src.services.message_service import (send_agent_message,
                                           send_functions_message,
@@ -36,9 +37,10 @@ async def chat_endpoint(body: Message):
     )
 
 @router.post("/chat/stream/functions", tags=["Chat Stream"])
-async def chat_functions_endpoint(body: Message):
+async def chat_functions_endpoint(body: FunctionChatMessage):
     """Chat endpoint."""
     messages = body.messages or []
+    functions = body.functions or []
     # session_id = body.session_id
     logger.debug('[POST /chat] Query: %s', str(body))
 
@@ -46,7 +48,8 @@ async def chat_functions_endpoint(body: Message):
         send_functions_message(
             messages,
             body.model,
-            body.temperature
+            body.temperature,
+            functions
         ),
         media_type="text/event-stream"
     )

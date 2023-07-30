@@ -50,3 +50,18 @@ def get_links(url: str):
         if href and urlparse(href).netloc == '':
             links.append(urljoin(url, href))
     return links
+
+# Function to match strings with an array of objects
+def match_strings(keys: list[str], functions):
+    # Initialize array to store output
+    output = []
+
+    # Loop through the functions array
+    for function in functions:
+        # If name property of function matches one of the strings in keys
+        if function['name'] in keys:
+            # Append the function to the output array
+            output.append(function)
+    
+    # Return the output array
+    return output

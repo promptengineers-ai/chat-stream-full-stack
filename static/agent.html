@@ -146,11 +146,13 @@
 									placeholder="Type your message here..." 
 								></textarea>
 								<button 
+									id="sendButton"
 									type="submit" 
 									class="btn btn-primary" 
 									style="background-color: #5E35B1; border-color: #5E35B1;"
 								>
-									<i class="fa fa-paper-plane"></i>
+									<i id="sendIcon" class="fa fa-paper-plane"></i>
+									<div id="spinner" class="spinner-border spinner-border-sm text-light" role="status" style="display: none;"></div>
 								</button>
 							</div>
 						</div>
@@ -175,9 +177,29 @@
 				// Set the value of the textarea
 				document.getElementById('systemMessage').value = systemMessage;
 				document.getElementById('modelType').value = modelType;
+
+				// Define an array of placeholder texts
+				let placeholders = [
+					"Who is the current president of New Zealand?",
+					"What are the most promising AI technologies of 2023?",
+					"Who won the Oscar for Best Actor in 2023?",
+					"Where would be the best place to go on vacation in 2023?",
+						// ... add as many as you want
+				];
+				
+				// Choose a random placeholder
+				let placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+				
+				// Set the placeholder
+				document.getElementById('userInput').value = placeholder;
 			});
 
 			function sendChatMessage(messages, sessionID, userInput, chatbox) {
+				// Show the spinner and hide the send icon
+				document.getElementById('spinner').style.display = 'block';
+				document.getElementById('sendIcon').style.display = 'none';
+				document.getElementById('sendButton').disabled = true;
+
 				// Get the system message and model type from localStorage
 				let modelType = localStorage.getItem('modelType') || 'gpt-3.5-turbo';
 				let systemMessage = localStorage.getItem('systemMessage') || 'You are a helpful assistant.';
