@@ -53,11 +53,15 @@ spec:
           - name: GOOGLE_API_KEY
             value : {{ .Values.googleApiKey }}
           - name: SERPAPI_API_KEY
-            value : {{ .Values.SerpapiApiKey }}
+            value : {{ .Values.serpapiApiKey }}
           - name: WEATHER_API_KEY
-            value : {{ .Values.WeatherApiKey }}
+            value : {{ .Values.weatherApiKey }}
           - name: YAHOOFINANCE_API_KEY
-            value : {{ .Values.YahooFinanceApiKey }}
+            value : {{ .Values.yahooFinanceApiKey }}
+          - name: ALPACA_API_KEY
+            value : {{ .Values.alpacaApiKey }}
+          - name: ALPACA_SECRET_KEY
+            value : {{ .Values.alpacaApiSecret }}
           - name: S3_ACCESS_KEY
             value : {{ .Values.s3AccessKey }}
           - name: S3_SECRET_KEY

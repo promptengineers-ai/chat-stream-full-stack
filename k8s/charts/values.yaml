@@ -14,9 +14,11 @@ openAiApiKey:
 promptLayerApiKey:
 googleCseId:
 googleApiKey:
-SerpapiApiKey:
-WeatherApiKey:
-YahooFinanceApiKey:
+serpapiApiKey:
+weatherApiKey:
+yahooFinanceApiKey:
+alpacaApiKey:
+alpacaApiSecret:
 
 ## Storage
 s3AccessKey:

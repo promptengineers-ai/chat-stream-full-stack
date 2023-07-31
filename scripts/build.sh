@@ -29,8 +29,7 @@ cd $(dirname $0)
 cd ../
 DIR=$(pwd)
 
-IMAGE_URL="sk8er71091/prompt-engineers-oss:$TAG"
-# IMAGE_URL="registry.gitlab.com/prompt-engineers/oss:$TAG"
+IMAGE_URL="promptengineersai/chat-stream-full-stack:$TAG"
 
 docker build -t $IMAGE_URL .
 docker push $IMAGE_URL

@@ -31,7 +31,7 @@ set +a
 
 
 helm -n $NAMESPACE upgrade -i --debug --wait --atomic \
---set image.repository=sk8er71091/prompt-engineers-oss \
+--set image.repository=promptengineersai/chat-stream-full-stack \
 --set image.tag=$TAG \
 --set autoscaling.enabled=$HPA \
 --set appEnv=$APP_ENV \
@@ -40,9 +40,11 @@ helm -n $NAMESPACE upgrade -i --debug --wait --atomic \
 --set promptLayerApiKey=$PROMPTLAYER_API_KEY \
 --set googleCseId=$GOOGLE_CSE_ID \
 --set googleApiKey=$GOOGLE_API_KEY \
---set SerpapiApiKey=$SERPAPI_API_KEY \
---set WeatherApiKey=$WEATHER_API_KEY \
---set YahooFinanceApiKey=$YAHOOFINANCE_API_KEY \
+--set serpapiApiKey=$SERPAPI_API_KEY \
+--set weatherApiKey=$WEATHER_API_KEY \
+--set yahooFinanceApiKey=$YAHOOFINANCE_API_KEY \
+--set alpacaApiKey=$ALPACA_API_KEY \
+--set alpacaApiSecret=$ALPACA_SECRET_KEY \
 --set s3AccessKey=$S3_ACCESS_KEY \
 --set s3SecretKey=$S3_SECRET_KEY \
 --set s3BucketName=$S3_BUCKET_NAME \
