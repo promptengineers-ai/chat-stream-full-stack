@@ -16,22 +16,22 @@ templates = Jinja2Templates(directory="static")
 @router.get("/", tags=["Interface"])
 async def chat_interface(request: Request):
     """Serves the index page."""
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("pages/index.html", {"request": request})
 
 @router.get("/functions", tags=["Interface"])
 async def chat_functions_interface(request: Request):
     """Serves the index page."""
-    return templates.TemplateResponse("functions.html", {"request": request})
+    return templates.TemplateResponse("pages/functions.html", {"request": request})
 
 @router.get("/agent", tags=["Interface"])
 async def chat_agent_interface(request: Request):
     """Serves the index page."""
-    return templates.TemplateResponse("agent.html", {"request": request})
+    return templates.TemplateResponse("pages/agent.html", {"request": request})
 
 @router.get("/vectorstore", tags=["Interface"])
 async def chat_vectorstore_interface(request: Request):
     """Serves the index page."""
-    return templates.TemplateResponse("vectorstore.html", {"request": request})
+    return templates.TemplateResponse("pages/vectorstore.html", {"request": request})
   
 #######################################################################
 ###  Status Endpoints

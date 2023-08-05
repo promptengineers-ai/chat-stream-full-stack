@@ -1,0 +1,111 @@
+{% extends "layouts/main.html" %}
+{% block content %}
+	{% include "components/navbars/index.html" %}
+  {% include "sections/main.html" %}
+  
+  <script>
+    function populateSelectBox(selectBox, items) {
+      // Clear the select box
+      while (selectBox.options.length > 0) {                
+        selectBox.remove(0);
+      } 
+  
+      // Populate the select box
+      items.forEach(function(item) {
+        let option = document.createElement('option');
+        option.text = item;
+        option.value = item;
+        selectBox.add(option);
+      });
+    }
+
+    function sendChatMessage(messages, sessionID, userInput, chatbox) {
+      // Show the spinner and hide the send icon
+      document.getElementById('spinner').style.display = 'block';
+      document.getElementById('sendIcon').style.display = 'none';
+      document.getElementById('sendButton').disabled = true;
+
+      // Get the system message and model type from localStorage
+      let selectSource = localStorage.getItem('selectSource') || document.getElementById('selectSource').value;
+      let modelType = localStorage.getItem('modelType') || 'gpt-3.5-turbo';
+      let systemMessage = localStorage.getItem('systemMessage') || 'You are a helpful assistant.';
+      messages[0].content = systemMessage;
+      console.log('selectSource', selectSource)
+      if (!selectSource) {
+        alert('Please select a vectorstore.');
+        return;
+      }
+
+      fetch(`/chat/stream/vectorstore`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          session_id: sessionID, 
+          messages: messages, 
+          vectorstore: selectSource,
+          model: modelType,
+          temperature: 0.9,
+        }),
+      }).then(response => {
+        console.log('Server Response:', response);
+        
+        // Handle the event stream from the response
+        let assistantMessageDiv = document.createElement('div');
+        assistantMessageDiv.className = 'message assistant';
+        chatbox.appendChild(assistantMessageDiv);
+        
+        let reader = response.body.getReader();
+        readMessage(reader, userInput, assistantMessageDiv, chatbox);
+      });
+    }
+
+    document.getElementById('userInput').addEventListener('keyup', function () {
+      this.style.height = 0;
+      this.style.height = this.scrollHeight + 'px';
+    }, false);
+
+    document.getElementById('selectSource').addEventListener('click', function() {
+      // Store the current selected value
+      let selectedValue = this.value;
+      localStorage.setItem('vectorstore', selectedValue);
+
+      getSources().then(data => {		
+          populateSelectBox(this, data.vectorstores);
+  
+          // Reset the selected value
+          this.value = selectedValue;
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      // Set the value of the textarea
+      document.getElementById('systemMessage').value = systemMessage;
+      document.getElementById('modelType').value = modelType;
+      // Your existing code
+      getSources().then(data => {
+        let selectSource = document.getElementById('selectSource'); // replace 'modelType' with the id of your selectSource element
+        populateSelectBox(selectSource, data.vectorstores);
+      });
+
+      // Define an array of placeholder texts
+      let placeholders = [
+        "Can you provide a React code sample to render a form?",
+        "Can you provide a Vanilla JS code sample to render a feedback survey form?",
+        "How do I get started with Form.io?",
+        "How can I deploy the Form.io platform within my own environment?",
+        "Is there a community on Github that I can join?",
+        "What should I do if I need help or support?",
+        "Can you give me a brief overview of how Form.io works?"
+          // ... add as many as you want
+      ];
+      
+      // Choose a random placeholder
+      let placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+      
+      // Set the placeholder
+      document.getElementById('userInput').value = placeholder;
+    });
+  </script>
+{% endblock %}

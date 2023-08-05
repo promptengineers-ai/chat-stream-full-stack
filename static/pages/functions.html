@@ -1,0 +1,72 @@
+{% extends "layouts/main.html" %}
+{% block content %}
+	{% include "components/navbars/index.html" %}
+  {% include "sections/main.html" %}
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      // Set the value of the textarea
+      document.getElementById('systemMessage').value = systemMessage;
+      document.getElementById('modelType').value = modelType;
+
+      // Define an array of placeholder texts
+      let placeholders = [
+        "What's the current trading price of Bitcoin, Ethereum, and Binance Coin?",
+        "Can you provide the week's weather forecast for London?",
+        "How is Apple's stock performing in the market today?",
+        "What's the weather prediction for Rio de Janeiro for the coming weekend?",
+        "Could you update me on the latest market trends for Amazon's stock?",
+        "What's the current temperature in Berlin?",
+        "What's the latest news regarding the price fluctuations of Tesla's stock?",
+        "What's the weather like in Moscow right now, and what's expected for the next few days?",
+        "Can you provide an update on the performance of Alphabet Inc.'s stock this week?",
+        "How are Cardano, Polkadot, and Ripple currently valued in the crypto market?",
+          // ... add as many as you want
+      ];
+      
+      // Choose a random placeholder
+      let placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+      
+      // Set the placeholder
+      document.getElementById('userInput').value = placeholder;
+    });
+
+    function sendChatMessage(messages, sessionID, userInput, chatbox) {
+      // Show the spinner and hide the send icon
+      document.getElementById('spinner').style.display = 'block';
+      document.getElementById('sendIcon').style.display = 'none';
+      document.getElementById('sendButton').disabled = true;
+
+      // Get the system message and model type from localStorage
+      let modelType = localStorage.getItem('modelType') || 'gpt-3.5-turbo';
+      let systemMessage = localStorage.getItem('systemMessage') || 'You are a helpful assistant.';
+      messages[0].content = systemMessage;
+      fetch(`/chat/stream/functions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          session_id: sessionID, 
+          messages: messages, 
+          model: modelType,
+          temperature: 0.9,
+          functions: [
+            "get_current_weather",
+            "get_latest_market_news"
+          ]
+        }),
+      }).then(response => {
+        console.log('Server Response:', response);
+        
+        // Handle the event stream from the response
+        let assistantMessageDiv = document.createElement('div');
+        assistantMessageDiv.className = 'message assistant';
+        chatbox.appendChild(assistantMessageDiv);
+        
+        let reader = response.body.getReader();
+        readMessage(reader, userInput, assistantMessageDiv, chatbox);
+      });
+    }
+  </script>
+{% endblock %}

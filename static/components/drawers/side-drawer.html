@@ -1,0 +1,60 @@
+<button 
+  class="btn btn-primary" 
+  style="z-index: 20; position: absolute; bottom: 60%; right: -10px; border: 0; background-color: #5E35B1;" 
+  type="button" data-bs-toggle="offcanvas" 
+  data-bs-target="#offcanvasExample" 
+  aria-controls="offcanvasExample"
+>
+  <i class="fa fa-cogs" style="translate: -3px;"></i>
+</button>
+<div 
+						class="offcanvas offcanvas-end" 
+						data-bs-scroll="true" 
+						tabindex="-1" 
+						id="offcanvasExample" 
+						aria-labelledby="offcanvasExampleLabel"
+						style="background-color: #2C313D; color: white;"
+					>
+						<div class="offcanvas-header" style="margin-right: 10px;">
+						  <h5 class="offcanvas-title" id="offcanvasExampleLabel">Settings</h5>
+						  <button 
+							style="background-color: white;"
+							type="button" 
+							class="btn-close text-reset" 
+							data-bs-dismiss="offcanvas" 
+							aria-label="Close"
+						  ></button>
+						</div>
+						<div class="offcanvas-body" style="margin-right: 10px;">
+							<div class="mb-2">
+								<label class="form-label">Select Source:</label>
+								<select id="selectSource" style="width: 100%; padding: 5px;">
+									
+								</select>
+							</div>
+							<div class="mb-2">
+								<label class="form-label">Select the model type:</label>
+								<select id="modelType" style="width: 100%; padding: 5px;">
+									<option value="gpt-3.5-turbo">GPT 3.5</option>
+									<option value="gpt-3.5-turbo-16k">GPT 3.5 16k</option>
+									<option value="gpt-4">GPT 4</option>
+								<!-- Add as many options as you need -->
+								</select>
+							</div>
+							<div class="mb-2">
+								<label class="form-label">Set the system message:</label>
+								<textarea 
+									id="systemMessage" 
+									rows="4" 
+									style="width: 100%; padding: 5px; max-height: max-content;"
+								></textarea>
+								<button
+									id="setSystemMessage" 
+									class="btn btn-primary mt-2"
+									style="background-color: #5E35B1; border-color: #5E35B1;"
+								>
+									Save
+								</button>
+							</div>
+						</div>
+					</div>

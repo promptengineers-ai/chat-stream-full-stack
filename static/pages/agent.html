@@ -1,0 +1,67 @@
+{% extends "layouts/main.html" %}
+{% block content %}
+	{% include "components/navbars/index.html" %}
+  {% include "sections/main.html" %}
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      // Set the value of the textarea
+      document.getElementById('systemMessage').value = systemMessage;
+      document.getElementById('modelType').value = modelType;
+
+      // Define an array of placeholder texts
+      let placeholders = [
+        "Who is the current president of New Zealand?",
+        "What are the most promising AI technologies of 2023?",
+        "Who won the Oscar for Best Actor in 2023?",
+        "Where would be the best place to go on vacation in 2023?",
+          // ... add as many as you want
+      ];
+      
+      // Choose a random placeholder
+      let placeholder = placeholders[Math.floor(Math.random() * placeholders.length)];
+      
+      // Set the placeholder
+      document.getElementById('userInput').value = placeholder;
+    });
+
+    function sendChatMessage(messages, sessionID, userInput, chatbox) {
+      // Show the spinner and hide the send icon
+      document.getElementById('spinner').style.display = 'block';
+      document.getElementById('sendIcon').style.display = 'none';
+      document.getElementById('sendButton').disabled = true;
+
+      // Get the system message and model type from localStorage
+      let modelType = localStorage.getItem('modelType') || 'gpt-3.5-turbo';
+      let systemMessage = localStorage.getItem('systemMessage') || 'You are a helpful assistant.';
+      messages[0].content = systemMessage;
+      fetch(`/chat/stream/agent`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          session_id: sessionID, 
+          messages: messages, 
+          model: modelType,
+          temperature: 0.9,
+        }),
+      }).then(response => {
+        console.log('Server Response:', response);
+        
+        // Handle the event stream from the response
+        let assistantMessageDiv = document.createElement('div');
+        assistantMessageDiv.className = 'message assistant';
+        chatbox.appendChild(assistantMessageDiv);
+        
+        let reader = response.body.getReader();
+        readMessage(reader, userInput, assistantMessageDiv, chatbox);
+      });
+    }
+    
+    document.getElementById('userInput').addEventListener('keyup', function () {
+      this.style.height = 0;
+      this.style.height = this.scrollHeight + 'px';
+    }, false);
+  </script>
+{% endblock %}
