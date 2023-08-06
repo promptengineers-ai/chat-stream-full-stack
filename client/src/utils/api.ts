@@ -1,5 +1,8 @@
 import config from '../config';
-import { getLastUserIndex } from './chat';
+import { 
+  constructUserMessageDiv, 
+  constructAssistantMessageDiv,
+} from './chat';
 
 /**----------------------------------------------------------
  * Retrieve the vectorstores from the server
@@ -38,27 +41,7 @@ export function sendContextMessage(
   }
   
   // Add the user's message to the messages array
-	let userMessageDiv = document.createElement('div');
-	userMessageDiv.innerHTML = config.marked.parse(
-    payload.messages[getLastUserIndex(payload.messages)].content
-  );
-
-  // Add a delete button to the user's message
-	let deleteButton = document.createElement('button');
-	let icon = document.createElement('i');
-	icon.className = 'fas fa-undo';
-	deleteButton.appendChild(icon);
-	deleteButton.className = 'delete-btn';
-
-  // Add the delete button and message text to the message div
-	let messageWrapper = document.createElement('div');
-
-	messageWrapper.appendChild(deleteButton);
-	userMessageDiv.appendChild(messageWrapper);
-
-  // Add the classes to the message div
-	userMessageDiv.className = 'message user';
-	messageWrapper.className = 'message-wrapper';
+	let userMessageDiv = constructUserMessageDiv(payload.messages);
 
   // Add the message div to the chatbox
   let chatbox = document.getElementById('chatbox') as HTMLDivElement;
@@ -83,7 +66,7 @@ export function sendContextMessage(
     let decoder = new TextDecoder();
     let accumulator = "";
     let assistantMessage = "";
-    let assistantMessageDiv = document.createElement('div');
+    let assistantMessageDiv = constructAssistantMessageDiv();
 
     reader?.read().then(function processMessage({done, value}): Promise<void> {
       if (done) {
@@ -120,8 +103,6 @@ export function sendContextMessage(
           assistantMessageDiv.innerHTML = config.marked.parse(assistantMessage);
         }
         
-        assistantMessageDiv.className = 'message assistant';
-        assistantMessageDiv.style.display = 'block'; 
         // add the assistant message to the chatbox
         chatbox.appendChild(assistantMessageDiv);
 
