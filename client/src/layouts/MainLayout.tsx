@@ -9,19 +9,19 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <body 
-      style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        backgroundColor: '#171923', 
-        height: '100vh' 
-      }}
-    >
+    <div>
       <header>
         <MainNavbar />
       </header>
       
-      <main style={{ flex: 1, display: 'flex' }}>
+      <main
+      style={{ 
+        // display: 'flex', 
+        // flexDirection: 'column', 
+        backgroundColor: '#171923', 
+        height: '100vh' 
+      }}
+      >
         <SideDrawer />
         {children}
       </main>
@@ -29,7 +29,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <footer>
         <MessageForm />
       </footer>
-    </body>
+    </div>
   );
 };
 

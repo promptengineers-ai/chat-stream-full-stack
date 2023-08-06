@@ -3,7 +3,7 @@ import { sendContextMessage } from '../../utils/api';
 
 const MessageForm: React.FC = () => {
   return (
-    <form id="messageForm" className="mb-3">
+    <form id="messageForm" className="pb-3">
       <div className="px-3" style={{ width: '100%' }}>
         <div className="input-group" style={{ width: '100%' }}>
           <textarea 

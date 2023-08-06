@@ -24,9 +24,9 @@ color: gray; /* This changes the color of the placeholder text */
 }
 
 #chatbox {
-flex: 1;
-overflow: auto;
-flex-direction: column;
+  max-height: 100%;
+  overflow: auto;
+  padding: 60px 10px;
 }
 
 #messageForm {
@@ -39,6 +39,7 @@ left: 0;
 right: 0;
 z-index: 999;
 width: 100%;
+background: linear-gradient(to top, #171923 0%, #171923 80%, rgba(255,0,0,0) 100%)
 }
 
 .message {
