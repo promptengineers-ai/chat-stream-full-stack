@@ -1,8 +1,9 @@
 import React from 'react';
 
 const Vectorstore: React.FC = () => {
+  
   return (
-    <div id="chatbox" className="mx-2" style={{ display: 'flex' }}>
+    <div id="chatbox" style={{ display: 'flex' }}>
     </div>
   );
 }

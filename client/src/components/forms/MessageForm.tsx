@@ -1,4 +1,5 @@
 import React from 'react';
+import { sendContextMessage } from '../../utils/api';
 
 const MessageForm: React.FC = () => {
   return (
@@ -12,6 +13,10 @@ const MessageForm: React.FC = () => {
             placeholder="Type your message here..." 
           ></textarea>
           <button 
+            onClick={(e) => {
+              e.preventDefault();
+              sendContextMessage();
+            }}
             id="sendButton"
             type="submit" 
             className="btn btn-primary" 
