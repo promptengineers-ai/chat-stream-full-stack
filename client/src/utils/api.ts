@@ -1,7 +1,7 @@
 import config from '../config';
 import { 
   constructUserMessageDiv, 
-  constructAssistantMessageDiv,
+  readStreamResponse,
 } from './chat';
 
 /**----------------------------------------------------------
@@ -25,7 +25,83 @@ export async function getSources() {
  * ----------------------------------------------------------
  * @returns 
  */
-export function sendContextMessage(
+ export function sendOpenAiChatMessage(
+  payload: {
+    model: string,
+    temperature: number,
+    messages: {role: string, content: string}[],
+  },
+  cb: (streamMessages: {role: string, content: string}[]) => void
+) {
+  // Add the user's message to the messages array
+	let userMessageDiv = constructUserMessageDiv(payload.messages);
+
+  // Add the message div to the chatbox
+  let chatbox = document.getElementById('chatbox') as HTMLDivElement;
+	chatbox.appendChild(userMessageDiv);
+
+  fetch(`${config.api.SERVER_URL}/chat/stream`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ 
+      session_id: '2323d2', 
+      messages: payload.messages,
+      model: payload.model,
+      temperature: payload.temperature,
+    }),
+  }).then(response => {
+    console.log('Server Response:', response);
+    readStreamResponse(response, payload.messages, chatbox, cb);   
+  });
+}
+
+/**----------------------------------------------------------
+ * Send a message to the server and get a response
+ * ----------------------------------------------------------
+ * @returns 
+ */
+ export function sendOpenAiFunctionChatMessage(
+  payload: {
+    model: string,
+    temperature: number,
+    messages: {role: string, content: string}[],
+    functions: string[],
+  },
+  cb: (streamMessages: {role: string, content: string}[]) => void
+) {
+  // Add the user's message to the messages array
+	let userMessageDiv = constructUserMessageDiv(payload.messages);
+
+  // Add the message div to the chatbox
+  let chatbox = document.getElementById('chatbox') as HTMLDivElement;
+	chatbox.appendChild(userMessageDiv);
+
+  fetch(`${config.api.SERVER_URL}/chat/stream/functions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ 
+      session_id: '2323d2', 
+      messages: payload.messages,
+      model: payload.model,
+      temperature: payload.temperature,
+      functions: payload.functions,
+    }),
+  }).then(response => {
+    console.log('Server Response:', response);
+    readStreamResponse(response, payload.messages, chatbox, cb);   
+  });
+}
+
+/**----------------------------------------------------------
+ * Send a message to the server and get a response
+ * ----------------------------------------------------------
+ * @returns 
+ */
+export function sendLangchainVectorstoreChatMessage(
   payload: {
     model: string,
     source: string,
@@ -61,57 +137,43 @@ export function sendContextMessage(
     }),
   }).then(response => {
     console.log('Server Response:', response);
-    
-    let reader = response.body?.getReader();
-    let decoder = new TextDecoder();
-    let accumulator = "";
-    let assistantMessage = "";
-    let assistantMessageDiv = constructAssistantMessageDiv();
+    readStreamResponse(response, payload.messages, chatbox, cb);   
+  });
+}
 
-    reader?.read().then(function processMessage({done, value}): Promise<void> {
-      if (done) {
-        console.log('Stream complete', payload.messages)
-        cb(payload.messages)
-        return Promise.resolve();  // return a resolved Promise
-      }
-    
-      // add the new data to the accumulator
-      accumulator += decoder.decode(value);
-    
-      // while there are complete messages in the accumulator, process them
-      let newlineIndex;
-      while ((newlineIndex = accumulator.indexOf("\n\n")) >= 0) {
-        let message = accumulator.slice(0, newlineIndex);
-        accumulator = accumulator.slice(newlineIndex + 2);
-    
-        if (message.startsWith("data: ")) {
-          message = message.slice(6);
-        }
-    
-        // append the message to the DOM
-        console.log(JSON.parse(message));
-        let parsed = JSON.parse(message).message;
-        assistantMessage += parsed;
+/**----------------------------------------------------------
+ * Send a message to the server and get a response
+ * ----------------------------------------------------------
+ * @returns 
+ */
+ export function sendLangchainAgentChatMessage(
+  payload: {
+    model: string,
+    temperature: number,
+    messages: {role: string, content: string}[],
+  },
+  cb: (streamMessages: {role: string, content: string}[]) => void
+) {
+  // Add the user's message to the messages array
+	let userMessageDiv = constructUserMessageDiv(payload.messages);
 
-        if (JSON.parse(message).type === "end") {
-          payload.messages.push({
-            role: "assistant", 
-            content: assistantMessage
-          });
-          assistantMessage = ""; // reset the assistant message for the next response
-        } else {							
-          assistantMessageDiv.innerHTML = config.marked.parse(assistantMessage);
-        }
-        
-        // add the assistant message to the chatbox
-        chatbox.appendChild(assistantMessageDiv);
+  // Add the message div to the chatbox
+  let chatbox = document.getElementById('chatbox') as HTMLDivElement;
+	chatbox.appendChild(userMessageDiv);
 
-        // scroll to the bottom every time a new message is added
-	      chatbox.scrollTop = chatbox.scrollHeight;
-      }
-    
-      // continue reading from the stream
-      return (reader?.read().then(processMessage)) ?? Promise.resolve();
-    })    
+  fetch(`${config.api.SERVER_URL}/chat/stream/agent`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ 
+      session_id: '2323d2', 
+      messages: payload.messages,
+      model: payload.model,
+      temperature: payload.temperature,
+    }),
+  }).then(response => {
+    console.log('Server Response:', response);
+    readStreamResponse(response, payload.messages, chatbox, cb);   
   });
 }
