@@ -14,7 +14,7 @@ const SideDrawer: React.FC = () => {
     if (open) {
       retrieveSources();
     }
-  }, [open])
+  }, [open, retrieveSources])
 
   return (
     <>

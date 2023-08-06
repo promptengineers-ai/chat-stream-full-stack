@@ -19,7 +19,7 @@ export default function ChatProvider({ children }: IContextProvider) {
     {role: 'system', content: ''},
   ]);
 
-  function updateCallback(streamMessages: any) {
+  function updateCallback(streamMessages: {role: string, content: string}[]): void {
     setMessages(streamMessages);
     setLoading(false);
     setChatPayload({...chatPayload, query: ''});

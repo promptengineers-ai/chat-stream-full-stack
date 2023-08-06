@@ -1,8 +1,11 @@
 import config from '../config';
-import { marked } from 'marked';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/github-dark-dimmed.css';
+import { getLastUserIndex } from './chat';
 
+/**----------------------------------------------------------
+ * Retrieve the vectorstores from the server
+ * ----------------------------------------------------------
+ * @returns 
+ */
 export async function getSources() {
 	return fetch(`${config.api.SERVER_URL}/vectorstores`, {
     method: 'GET',
@@ -14,56 +17,9 @@ export async function getSources() {
 	.catch(error => console.error('Error:', error));
 }
 
-// const messages = [
-//   {role: 'system', content: 'You are a helpful assistant.'}
-// ];
-
-const renderer = new marked.Renderer();
-renderer.codespan = function(text) {
-	return `<code class="my-custom-class">${text}</code>`;
-};
-renderer.code = function(code, language, isEscaped) {
-	// Check whether the given language is valid for highlight.js.
-	const validLang = !!(language && hljs.getLanguage(language));
-	// Highlight only if the language is valid.
-	const highlighted = validLang ? hljs.highlight(code, { language }).value : code;
-	// Render the highlighted code with `hljs` class.
-	if (language) {
-		return `<pre class="my-custom-code-class hljs ${language}" style="padding: 0;"><div style="background-color: black; color: white;"><p style="padding: 5px; margin: 0; display: flex; justify-content: space-between;">${language}<button class="copy-btn"><i class="fas fa-copy"></i></button></p></div><code class="hljs ${language}" style="padding: 15px;">${highlighted}</code></pre>`;
-	} else {
-		return `<pre class="my-custom-code-class" style="padding: 0;"><code class="hljs ${language}" style="padding: 15px;">${highlighted}</code></pre>`;
-	}
-};
-renderer.link = function( href, title, text ) {
-	return '<a target="_blank" href="'+ href +'" title="' + title + '">' + text + '</a>';
-}
-
-// Set options for marked
-marked.setOptions({
-  headerIds: false,
-  mangle: false,
-  renderer: renderer,
-  highlight: function (code, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      return hljs.highlight(code, { language: lang }).value;
-    }
-    return hljs.highlightAuto(code).value;
-  },
-});
-
-const getLastUserIndex = (messages: {role: string, content: string}[]): number => {
-  for (let i = messages.length - 1; i >= 0; i--) {
-    if (messages[i].role === 'user') {
-      // Return the index if the object property "role" is equal to "user"
-      return i;
-    }
-  }
-  // Return -1 if no object property "role" is equal to "user"
-  return -1;
-};
-
-/**
+/**----------------------------------------------------------
  * Send a message to the server and get a response
+ * ----------------------------------------------------------
  * @returns 
  */
 export function sendContextMessage(
@@ -73,7 +29,7 @@ export function sendContextMessage(
     temperature: number,
     messages: {role: string, content: string}[],
   },
-  cb: any
+  cb: (streamMessages: {role: string, content: string}[]) => void
 ) {
 
   if (!payload.source) {
@@ -83,7 +39,9 @@ export function sendContextMessage(
   
   // Add the user's message to the messages array
 	let userMessageDiv = document.createElement('div');
-	userMessageDiv.innerHTML = marked.parse(payload.messages[getLastUserIndex(payload.messages)].content);
+	userMessageDiv.innerHTML = config.marked.parse(
+    payload.messages[getLastUserIndex(payload.messages)].content
+  );
 
   // Add a delete button to the user's message
 	let deleteButton = document.createElement('button');
@@ -95,9 +53,7 @@ export function sendContextMessage(
   // Add the delete button and message text to the message div
 	let messageWrapper = document.createElement('div');
 
-  console.log('MESSAGE TEXT: ', userMessageDiv.innerHTML)
 	messageWrapper.appendChild(deleteButton);
-	// messageWrapper.appendChild(messageText);
 	userMessageDiv.appendChild(messageWrapper);
 
   // Add the classes to the message div
@@ -161,7 +117,7 @@ export function sendContextMessage(
           });
           assistantMessage = ""; // reset the assistant message for the next response
         } else {							
-          assistantMessageDiv.innerHTML = marked.parse(assistantMessage);
+          assistantMessageDiv.innerHTML = config.marked.parse(assistantMessage);
         }
         
         assistantMessageDiv.className = 'message assistant';
