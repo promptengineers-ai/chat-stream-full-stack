@@ -1,10 +1,12 @@
 import { useContext, createContext, useState } from "react";
 import { IContextProvider } from "../interfaces/Provider";
 import { sendContextMessage } from "../utils/api";
+import { useAppContext } from "./AppContext";
 import { useSourcesContext } from "./SourcesContext";
 
 export const ChatContext = createContext({});
 export default function ChatProvider({ children }: IContextProvider) {
+  const { setLoading } = useAppContext();
   const { sources } = useSourcesContext();
   const [chatPayload, setChatPayload] = useState({
     systemMessage: 'You are a helpful assistant.',
@@ -17,22 +19,30 @@ export default function ChatProvider({ children }: IContextProvider) {
     {role: 'system', content: ''},
   ]);
 
+  function updateCallback(streamMessages: any) {
+    setMessages(streamMessages);
+    setLoading(false);
+    setChatPayload({...chatPayload, query: ''});
+  }
+
   function sendChatPayload(pathname: string) {
+    setLoading(true);
     // append the user's message to the conversation
     messages[0].content = localStorage.getItem('systemMessage') || chatPayload.systemMessage;
     messages.push({role: 'user', content: chatPayload.query});
+
+    // send the message to the backend
     if (pathname === '/vectorstore') {
       sendContextMessage({
         model: localStorage.getItem('model') || chatPayload.model,
         source: localStorage.getItem('source') || sources[0],
         temperature: parseFloat(localStorage.getItem('temperature') || '') || chatPayload.temperature,
         messages: messages
-      }, setMessages);
+      }, updateCallback);
     } else {
       alert("This feature is not available yet.");
       return;
     }
-    setChatPayload({...chatPayload, query: ''});
   }
 
   return (

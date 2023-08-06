@@ -13,6 +13,13 @@ border-radius: 5px;
 border: solid 1px gray;
 }
 
+.form-control:disabled, select:disabled, textarea:disabled {
+  background-color: #171923;
+  color: gray;
+  border-radius: 5px;
+  border: solid 1px gray;
+}
+
 .form-control:active, .form-control:focus, select:active, select:focus {
 background-color: #171923; /* This makes the background remain the same color when focused */
 color: lightgray;

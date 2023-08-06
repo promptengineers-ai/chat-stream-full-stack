@@ -83,8 +83,7 @@ export function sendContextMessage(
   
   // Add the user's message to the messages array
 	let userMessageDiv = document.createElement('div');
-	let messageText = document.createElement('span');
-	messageText.textContent = payload.messages[getLastUserIndex(payload.messages)].content;
+	userMessageDiv.innerHTML = marked.parse(payload.messages[getLastUserIndex(payload.messages)].content);
 
   // Add a delete button to the user's message
 	let deleteButton = document.createElement('button');
@@ -95,8 +94,10 @@ export function sendContextMessage(
 
   // Add the delete button and message text to the message div
 	let messageWrapper = document.createElement('div');
+
+  console.log('MESSAGE TEXT: ', userMessageDiv.innerHTML)
 	messageWrapper.appendChild(deleteButton);
-	messageWrapper.appendChild(messageText);
+	// messageWrapper.appendChild(messageText);
 	userMessageDiv.appendChild(messageWrapper);
 
   // Add the classes to the message div
