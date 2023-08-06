@@ -14,9 +14,9 @@ export async function getSources() {
 	.catch(error => console.error('Error:', error));
 }
 
-const messages = [
-  {role: 'system', content: 'You are a helpful assistant.'}
-];
+// const messages = [
+//   {role: 'system', content: 'You are a helpful assistant.'}
+// ];
 
 const renderer = new marked.Renderer();
 renderer.codespan = function(text) {
@@ -51,27 +51,40 @@ marked.setOptions({
   },
 });
 
+const getLastUserIndex = (messages: {role: string, content: string}[]): number => {
+  for (let i = messages.length - 1; i >= 0; i--) {
+    if (messages[i].role === 'user') {
+      // Return the index if the object property "role" is equal to "user"
+      return i;
+    }
+  }
+  // Return -1 if no object property "role" is equal to "user"
+  return -1;
+};
+
 /**
  * Send a message to the server and get a response
  * @returns 
  */
-export function sendContextMessage() {
-  // Get the system message and model type from localStorage
-  let chatbox = document.getElementById('chatbox') as HTMLDivElement;
-  let selectSource = 'formio.pkl';
-  let modelType = 'gpt-3.5-turbo';
-  let systemMessage = localStorage.getItem('systemMessage') || 'You are a helpful assistant.';
-  messages[0].content = systemMessage;
+export function sendContextMessage(
+  payload: {
+    model: string,
+    source: string,
+    temperature: number,
+    messages: {role: string, content: string}[],
+  },
+  cb: any
+) {
 
-  // create a div for the user's message
-  let userMessage = 'Can you provide a react code sample to render a form?';
-
-  // append the user's message to the conversation
-	messages.push({role: "user", content: userMessage});
-
+  if (!payload.source) {
+    alert('Please select a vectorstore.');
+    return;
+  }
+  
+  // Add the user's message to the messages array
 	let userMessageDiv = document.createElement('div');
 	let messageText = document.createElement('span');
-	messageText.textContent = userMessage;
+	messageText.textContent = payload.messages[getLastUserIndex(payload.messages)].content;
 
   // Add a delete button to the user's message
 	let deleteButton = document.createElement('button');
@@ -91,12 +104,8 @@ export function sendContextMessage() {
 	messageWrapper.className = 'message-wrapper';
 
   // Add the message div to the chatbox
+  let chatbox = document.getElementById('chatbox') as HTMLDivElement;
 	chatbox.appendChild(userMessageDiv);
-
-  if (!selectSource) {
-    alert('Please select a vectorstore.');
-    return;
-  }
 
   fetch(`${config.api.SERVER_URL}/chat/stream/vectorstore`, {
     method: 'POST',
@@ -105,10 +114,10 @@ export function sendContextMessage() {
     },
     body: JSON.stringify({ 
       session_id: '2323d2', 
-      messages: messages, 
-      vectorstore: selectSource,
-      model: modelType,
-      temperature: 0.9,
+      messages: payload.messages, 
+      vectorstore: payload.source,
+      model: payload.model,
+      temperature: payload.temperature,
     }),
   }).then(response => {
     console.log('Server Response:', response);
@@ -121,7 +130,8 @@ export function sendContextMessage() {
 
     reader?.read().then(function processMessage({done, value}): Promise<void> {
       if (done) {
-        console.log('Stream complete');
+        console.log('Stream complete', payload.messages)
+        cb(payload.messages)
         return Promise.resolve();  // return a resolved Promise
       }
     
@@ -144,7 +154,7 @@ export function sendContextMessage() {
         assistantMessage += parsed;
 
         if (JSON.parse(message).type === "end") {
-          messages.push({
+          payload.messages.push({
             role: "assistant", 
             content: assistantMessage
           });

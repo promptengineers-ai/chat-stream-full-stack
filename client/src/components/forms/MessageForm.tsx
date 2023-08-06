@@ -1,7 +1,10 @@
 import React from 'react';
-import { sendContextMessage } from '../../utils/api';
+import { useLocation } from 'react-router-dom';
+import { useChatContext } from '../../contexts/ChatContext';
 
 const MessageForm: React.FC = () => {
+  const location = useLocation();
+  const {sendChatPayload, chatPayload, setChatPayload} = useChatContext();
   return (
     <form id="messageForm" className="pb-3">
       <div className="px-3" style={{ width: '100%' }}>
@@ -10,12 +13,14 @@ const MessageForm: React.FC = () => {
             rows={1}
             id="userInput" 
             className="form-control" 
-            placeholder="Type your message here..." 
+            placeholder="Type your message here..."
+            onChange={(e) => setChatPayload({...chatPayload, query: e.target.value})}
+            value={chatPayload.query} 
           ></textarea>
           <button 
             onClick={(e) => {
               e.preventDefault();
-              sendContextMessage();
+              sendChatPayload(location.pathname);
             }}
             id="sendButton"
             type="submit" 
@@ -23,7 +28,12 @@ const MessageForm: React.FC = () => {
             style={{ backgroundColor: '#5E35B1', borderColor: '#5E35B1' }}
           >
             <i id="sendIcon" className="fa fa-paper-plane"></i>
-            <div id="spinner" className="spinner-border spinner-border-sm text-light" role="status" style={{ display: 'none' }}></div>
+            <div 
+              id="spinner" 
+              className="spinner-border spinner-border-sm text-light" 
+              role="status" 
+              style={{ display: 'none' }}
+            ></div>
           </button>
         </div>
       </div>

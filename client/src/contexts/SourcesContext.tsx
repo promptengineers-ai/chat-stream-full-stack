@@ -1,4 +1,4 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
 import { IContextProvider } from "../interfaces/Provider";
 import { getSources } from '../utils/api';
 
@@ -10,6 +10,10 @@ export default function SourcesProvider({ children }: IContextProvider) {
     const res = await getSources();
     setSources(res.vectorstores);
   }
+
+  useEffect(() => {
+    retrieveSources();
+  }, [])
 
   return (
     <SourcesContext.Provider

@@ -1,38 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useChatContext } from '../../contexts/ChatContext';
 import { useSourcesContext } from '../../contexts/SourcesContext';
 
 const SideDrawer: React.FC = () => {
   const location = useLocation();
   const { retrieveSources, sources } = useSourcesContext();
+  const { chatPayload, setChatPayload } = useChatContext();
   // Create a state object to hold the selected values
   const [open, setOpen] = useState<boolean>(false);
-  const [settings, setSettings] = useState({
-    selectedSource: '',
-    selectedModelType: '',
-    systemMessage: '',
-  });
-
-  const handleSaveClick = () => {
-    // Get the selected values from the DOM
-    const sourceSelect = document.getElementById('selectSource') as HTMLSelectElement;
-    const modelTypeSelect = document.getElementById('modelType') as HTMLSelectElement;
-    const systemMessageInput = document.getElementById('systemMessage') as HTMLTextAreaElement;
-
-    // Update the state object with the selected values
-    setSettings({
-      selectedSource: sourceSelect.value,
-      selectedModelType: modelTypeSelect.value,
-      systemMessage: systemMessageInput.value,
-    });
-    alert(JSON.stringify(settings))
-  };
 
   useEffect(() => {
     if (open) {
       retrieveSources();
     }
-  }, [retrieveSources, open])
+  }, [open])
 
   return (
     <>
@@ -79,7 +61,15 @@ const SideDrawer: React.FC = () => {
           {location.pathname === '/vectorstore' && (
             <div className="mb-2">
               <label className="form-label">Select Source:</label>
-              <select id="selectSource" style={{ width: '100%', padding: '5px' }}>
+              <select 
+                id="selectSource" 
+                style={{ width: '100%', padding: '5px' }}
+                onChange={(e) => {
+                  setChatPayload({...chatPayload, vectorestore: e.target.value});
+                  localStorage.setItem('source', e.target.value);
+                }}
+                value={chatPayload.vectorestore}
+              >
                 {sources.map((source: string, index: number) => (
                   <option key={index} value={source}>
                     {source}
@@ -90,11 +80,18 @@ const SideDrawer: React.FC = () => {
           )}
           <div className="mb-2">
             <label className="form-label">Select the model type:</label>
-            <select id="modelType" style={{ width: '100%', padding: '5px' }}>
+            <select 
+              id="modelType" 
+              style={{ width: '100%', padding: '5px' }}
+              onChange={(e) => {
+                setChatPayload({...chatPayload, model: e.target.value});
+                localStorage.setItem('model', e.target.value);
+              }}
+              value={chatPayload.model}
+            >
               <option value="gpt-3.5-turbo">GPT 3.5</option>
               <option value="gpt-3.5-turbo-16k">GPT 3.5 16k</option>
               <option value="gpt-4">GPT 4</option>
-              {/* Add as many options as you need */}
             </select>
           </div>
           <div className="mb-2">
@@ -103,15 +100,12 @@ const SideDrawer: React.FC = () => {
               id="systemMessage"
               rows={4}
               style={{ width: '100%', padding: '5px', maxHeight: 'max-content' }}
+              onChange={(e) => {
+                setChatPayload({...chatPayload, systemMessage: e.target.value})
+                localStorage.setItem('systemMessage', e.target.value);
+              }}
+              value={chatPayload.systemMessage}
             ></textarea>
-            <button
-              id="setSystemMessage"
-              className="btn btn-primary mt-2"
-              style={{ backgroundColor: '#5E35B1', borderColor: '#5E35B1' }}
-              onClick={handleSaveClick} // Call the handleSaveClick function when the button is clicked
-            >
-              Save
-            </button>
           </div>
         </div>
       </div>

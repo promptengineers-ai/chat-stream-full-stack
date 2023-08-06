@@ -15,12 +15,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       </header>
       
       <main
-      style={{ 
-        // display: 'flex', 
-        // flexDirection: 'column', 
-        backgroundColor: '#171923', 
-        height: '100vh' 
-      }}
+        style={{ 
+          backgroundColor: '#171923', 
+          height: '100vh' 
+        }}
       >
         <SideDrawer />
         {children}
