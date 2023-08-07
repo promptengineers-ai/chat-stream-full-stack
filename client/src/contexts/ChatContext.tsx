@@ -28,6 +28,12 @@ export default function ChatProvider({ children }: IContextProvider) {
     {role: 'system', content: ''},
   ]);
 
+  const resetMessages = () => {
+    setMessages([
+      {role: 'system', content: ''},
+    ]);  
+  };
+
   function updateCallback(streamMessages: {role: string, content: string}[]): void {
     setMessages(streamMessages);
     setLoading(false);
@@ -79,6 +85,7 @@ export default function ChatProvider({ children }: IContextProvider) {
       value={{
         messages,
         setMessages,
+        resetMessages,
         chatPayload,
         setChatPayload,
         sendChatPayload,
