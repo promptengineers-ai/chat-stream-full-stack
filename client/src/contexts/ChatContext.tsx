@@ -1,4 +1,4 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useRef } from "react";
 import { IContextProvider } from "../interfaces/Provider";
 import { 
   sendLangchainAgentChatMessage,
@@ -11,6 +11,7 @@ import { useSourcesContext } from "./SourcesContext";
 
 export const ChatContext = createContext({});
 export default function ChatProvider({ children }: IContextProvider) {
+  const chatboxRef = useRef(null);
   const { setLoading } = useAppContext();
   const { sources } = useSourcesContext();
   const [chatPayload, setChatPayload] = useState({
@@ -46,9 +47,13 @@ export default function ChatProvider({ children }: IContextProvider) {
       return;
     }
     setLoading(true);
+
+    // Create a copy of the current messages
+    const updatedMessages = [...messages];
+
     // Append the user's message to the conversation
-    messages[0].content = localStorage.getItem('systemMessage') || chatPayload.systemMessage;
-    messages.push({role: 'user', content: chatPayload.query});
+    updatedMessages[0].content = localStorage.getItem('systemMessage') || chatPayload.systemMessage;
+    updatedMessages.push({role: 'user', content: chatPayload.query});
 
     // Construct the payload
     const model = localStorage.getItem('model') || chatPayload.model;
@@ -56,7 +61,7 @@ export default function ChatProvider({ children }: IContextProvider) {
     const payload = {
       model,
       temperature,
-      messages,
+      messages: updatedMessages,
     }
 
     // Send the message to the appropriate API
@@ -83,6 +88,7 @@ export default function ChatProvider({ children }: IContextProvider) {
   return (
     <ChatContext.Provider
       value={{
+        chatboxRef,
         messages,
         setMessages,
         resetMessages,
