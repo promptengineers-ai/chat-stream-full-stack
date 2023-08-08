@@ -6,14 +6,15 @@ import { useChatContext } from '../../contexts/ChatContext';
 const MessageForm: React.FC = () => {
   const location = useLocation();
   const {loading} = useAppContext();
-  const {sendChatPayload, chatPayload, setChatPayload} = useChatContext();
+  const {sendChatPayload, chatPayload, setChatPayload, userInputRef} = useChatContext();
   return (
     <form id="messageForm" className="pb-3">
       <div className="px-3" style={{ width: '100%' }}>
         <div className="input-group" style={{ width: '100%' }}>
           <textarea 
             rows={1}
-            id="userInput" 
+            id="userInput"
+            ref={userInputRef} 
             className="form-control" 
             placeholder="Type your message here..."
             onChange={(e) => setChatPayload({...chatPayload, query: e.target.value})}

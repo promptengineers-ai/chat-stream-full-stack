@@ -12,6 +12,7 @@ import { useSourcesContext } from "./SourcesContext";
 export const ChatContext = createContext({});
 export default function ChatProvider({ children }: IContextProvider) {
   const chatboxRef = useRef(null);
+  const userInputRef = useRef<HTMLInputElement | null>(null);
   const { setLoading } = useAppContext();
   const { sources } = useSourcesContext();
   const [chatPayload, setChatPayload] = useState({
@@ -35,10 +36,50 @@ export default function ChatProvider({ children }: IContextProvider) {
     ]);  
   };
 
+  function handleChatboxButtonClick(e: MouseEvent) {
+    if ((e.target as HTMLElement).classList.contains('copy-btn')) {
+      // 2. Get the code content
+      const preElement = (e.target as HTMLElement).closest('pre');
+      const codeContent = preElement?.querySelector('code')?.innerText || '';
+      console.log(codeContent)
+      // 3. Use Clipboard API to copy
+      navigator.clipboard.writeText(codeContent).then(() => {
+        // Optional: Show a toast or feedback to user saying "Copied to clipboard!"
+        alert('Copied to clipboard!');
+        return;
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+    }
+
+    if ((e.target as HTMLElement).closest('.delete-btn')) {
+      const chatbox = document.getElementById('chatbox') as HTMLElement;
+      const messageDiv = (e.target as HTMLElement).closest('.message') as HTMLElement;
+      const allMessages = Array.from(chatbox.children);
+      const messageIndex = allMessages.indexOf(messageDiv);
+
+      // Create a copy of the current messages
+      const updatedMessages = [...messages];
+      let lastElement = updatedMessages[messageIndex + 1];
+      setChatPayload({...chatPayload, query: lastElement.content});
+
+      // Remove elements from the array
+      allMessages.splice(messageIndex);
+      updatedMessages.splice(messageIndex+1); // Includes a system message
+      setMessages(updatedMessages);
+
+      // Remove corresponding DOM elements
+      while (chatbox.children.length > messageIndex) {
+        chatbox.removeChild(chatbox.lastChild!);
+      }
+    }
+  }
+
   function updateCallback(streamMessages: {role: string, content: string}[]): void {
     setMessages(streamMessages);
     setLoading(false);
     setChatPayload({...chatPayload, query: ''});
+    userInputRef.current?.focus();
   }
 
   function sendChatPayload(pathname: string) {
@@ -89,12 +130,14 @@ export default function ChatProvider({ children }: IContextProvider) {
     <ChatContext.Provider
       value={{
         chatboxRef,
+        userInputRef,
         messages,
         setMessages,
         resetMessages,
         chatPayload,
         setChatPayload,
         sendChatPayload,
+        handleChatboxButtonClick,
       }}
     >
       {children}
