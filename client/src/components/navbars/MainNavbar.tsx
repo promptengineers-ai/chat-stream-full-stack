@@ -1,17 +1,33 @@
 import { Link } from 'react-router-dom';
+import { useAppContext } from '../../contexts/AppContext';
 
 
 export default function MainNavbar() {
+  const {active, setActive} = useAppContext();
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 fixed-top">
       <Link className="navbar-brand" to="/">
         <img src="/static/assets/icon.png" alt="" width="40px" />
         OpenAI - ChatGPT
       </Link>
-      <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button 
+      onClick={() => setActive(!active)}
+      className="navbar-toggler" 
+      type="button" 
+      data-bs-toggle="collapse" 
+      data-bs-target="#navbarNav" 
+      aria-controls="navbarNav" 
+      aria-expanded="false" 
+      aria-label="Toggle navigation"
+      >
         <span className="navbar-toggler-icon"></span>
       </button>
-      <div className="collapse navbar-collapse" id="navbarNav">
+      <div 
+      className={`collapse navbar-collapse ${active ? 'show' : null}`} 
+      id="navbarNav" 
+      
+      >
         <ul className="navbar-nav">
           <li className="nav-item dropdown">
             <button className="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

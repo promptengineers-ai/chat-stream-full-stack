@@ -1,4 +1,4 @@
-import { useContext, createContext, useState, useRef } from "react";
+import { useContext, createContext, useState, useRef, useEffect } from "react";
 import { IContextProvider } from "../interfaces/Provider";
 import { 
   sendLangchainAgentChatMessage,
@@ -13,7 +13,7 @@ export const ChatContext = createContext({});
 export default function ChatProvider({ children }: IContextProvider) {
   const chatboxRef = useRef(null);
   const userInputRef = useRef<HTMLInputElement | null>(null);
-  const { setLoading } = useAppContext();
+  const { setLoading, setActive } = useAppContext();
   const { sources } = useSourcesContext();
   const [chatPayload, setChatPayload] = useState({
     systemMessage: 'You are a helpful assistant.',
@@ -127,6 +127,19 @@ export default function ChatProvider({ children }: IContextProvider) {
       return;
     }
   }
+
+  useEffect(() => {
+    // 1. Add an event listener on the chatbox
+    const chatbox = document.getElementById('chatbox');
+    chatbox?.addEventListener('click', handleChatboxClick);
+    
+    userInputRef.current?.focus();
+
+    // Cleanup event listener
+    return () => {
+      chatbox?.removeEventListener('click', handleChatboxClick);
+    };
+  }, [,messages]);
 
   return (
     <ChatContext.Provider
