@@ -33,7 +33,7 @@ color: gray; /* This changes the color of the placeholder text */
 #chatbox {
   max-height: 100%;
   overflow: auto;
-  padding: 60px 10px;
+  padding: 65px 0px;
 }
 
 #messageForm {
@@ -52,8 +52,6 @@ background: linear-gradient(to top, #171923 0%, #171923 80%, rgba(255,0,0,0) 100
 .message {
 padding: 1em;
 display: block;
-margin: 5px;
-border-radius: 10px;
 word-wrap: break-word;
 }
 .user {
@@ -63,7 +61,7 @@ z-index: 10;
 position: relative;
 }
 .assistant {
-background-color: #2C313D;
+background-color: #171923;
 color: white;
 z-index: 10;
 position: relative;
@@ -75,7 +73,7 @@ border-radius: 5px;
 }
 .my-custom-class {
 background-color: #000;
-color:white;
+color:greenyellow;
 padding: 3px;
 border-radius: 3px;
 }

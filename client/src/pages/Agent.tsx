@@ -11,7 +11,7 @@ const Agent: React.FC = () => {
 
   useEffect(() => {
     resetMessages();
-    setLogoText('Langchain - Chat Agent');
+    setLogoText('Langchain | Chat Agent');
     setActive(false);
   }, [location.pathname]);
   

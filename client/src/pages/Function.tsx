@@ -11,7 +11,7 @@ const Function: FC = () => {
 
   useEffect(() => {
     resetMessages();
-    setLogoText('Open AI - Chat Functions');
+    setLogoText('Open AI | Chat Functions');
     setActive(false);
   }, [location.pathname]);
   

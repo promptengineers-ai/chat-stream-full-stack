@@ -11,7 +11,7 @@ const Home: FC = () => {
   useEffect(() => {
     resetMessages();
     userInputRef.current?.focus();
-    setLogoText('Open AI - Chat');
+    setLogoText('Open AI | Chat GPT');
     setActive(false);
   }, [location.pathname]);
 

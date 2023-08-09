@@ -12,7 +12,7 @@ const Vectorstore: FC = () => {
   useEffect(() => {
     resetMessages();
     setActive(false);
-    setLogoText('Langchain - Vectorstore Chat');
+    setLogoText('Langchain | Chat Vectorstore');
   }, [location.pathname]);
   
   return (

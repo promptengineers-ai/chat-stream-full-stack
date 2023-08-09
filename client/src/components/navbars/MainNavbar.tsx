@@ -6,27 +6,26 @@ export default function MainNavbar() {
   const {active, setActive, logoText} = useAppContext();
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-4 fixed-top">
+    <nav className="navbar navbar-expand-md navbar-dark bg-dark px-4 fixed-top">
       <Link className="navbar-brand" to="/">
-        <img src="/static/assets/icon.png" alt="" width="40px" />
-        {logoText}
+        <img src="/icon.png" alt="" width="40px"/>
+        <span className='ml-2'>{logoText}</span>
       </Link>
       <button 
-      onClick={() => setActive(!active)}
-      className="navbar-toggler" 
-      type="button" 
-      data-bs-toggle="collapse" 
-      data-bs-target="#navbarNav" 
-      aria-controls="navbarNav" 
-      aria-expanded="false" 
-      aria-label="Toggle navigation"
+        onClick={() => setActive(!active)}
+        className="navbar-toggler" 
+        type="button" 
+        data-bs-toggle="collapse" 
+        data-bs-target="#navbarNav" 
+        aria-controls="navbarNav" 
+        aria-expanded="false" 
+        aria-label="Toggle navigation"
       >
         <span className="navbar-toggler-icon"></span>
       </button>
       <div 
-      className={`collapse navbar-collapse ${active ? 'show' : null}`} 
-      id="navbarNav" 
-      
+        className={`collapse navbar-collapse ${active ? 'show' : null}`} 
+        id="navbarNav" 
       >
         <ul className="navbar-nav">
           <li className="nav-item dropdown">
