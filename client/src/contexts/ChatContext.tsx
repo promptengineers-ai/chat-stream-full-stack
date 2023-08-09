@@ -13,7 +13,7 @@ export const ChatContext = createContext({});
 export default function ChatProvider({ children }: IContextProvider) {
   const chatboxRef = useRef(null);
   const userInputRef = useRef<HTMLInputElement | null>(null);
-  const { setLoading, setActive } = useAppContext();
+  const { setLoading } = useAppContext();
   const { sources } = useSourcesContext();
   const [chatPayload, setChatPayload] = useState({
     systemMessage: 'You are a helpful assistant.',

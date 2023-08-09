@@ -7,11 +7,11 @@ const Agent: React.FC = () => {
 
   const location = useLocation();
   const { resetMessages } = useChatContext();
-  const { setActive } = useAppContext();
+  const { setActive, setLogoText } = useAppContext();
 
   useEffect(() => {
     resetMessages();
-    
+    setLogoText('Langchain - Chat Agent');
     setActive(false);
   }, [location.pathname]);
   

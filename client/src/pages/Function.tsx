@@ -7,10 +7,11 @@ const Function: FC = () => {
 
   const location = useLocation();
   const { resetMessages } = useChatContext();
-  const { setActive } = useAppContext();
+  const { setActive, setLogoText } = useAppContext();
 
   useEffect(() => {
     resetMessages();
+    setLogoText('Open AI - Chat Functions');
     setActive(false);
   }, [location.pathname]);
   

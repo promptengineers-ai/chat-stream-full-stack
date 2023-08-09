@@ -7,11 +7,12 @@ const Vectorstore: FC = () => {
 
   const location = useLocation();
   const { resetMessages } = useChatContext();
-  const { setActive } = useAppContext();
+  const { setActive, setLogoText } = useAppContext();
 
   useEffect(() => {
     resetMessages();
     setActive(false);
+    setLogoText('Langchain - Vectorstore Chat');
   }, [location.pathname]);
   
   return (

@@ -7,6 +7,7 @@ export default function AppProvider({ children }: IContextProvider) {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [active, setActive] = useState<boolean>(false);
+  const [logoText, setLogoText] = useState<string>('');
 
   return (
     <AppContext.Provider
@@ -15,6 +16,8 @@ export default function AppProvider({ children }: IContextProvider) {
         setLoading,
         active,
         setActive,
+        logoText,
+        setLogoText,
       }}
     >
       {children}

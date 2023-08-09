@@ -5,12 +5,13 @@ import { useChatContext } from '../contexts/ChatContext';
 
 const Home: FC = () => {
   const location = useLocation();
-  const { setActive } = useAppContext();
+  const { setActive, setLogoText } = useAppContext();
   const { resetMessages, userInputRef } = useChatContext();
 
   useEffect(() => {
     resetMessages();
     userInputRef.current?.focus();
+    setLogoText('Open AI - Chat');
     setActive(false);
   }, [location.pathname]);
 
