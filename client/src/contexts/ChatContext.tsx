@@ -36,7 +36,7 @@ export default function ChatProvider({ children }: IContextProvider) {
     ]);  
   };
 
-  function handleChatboxButtonClick(e: MouseEvent) {
+  function handleChatboxClick(e: MouseEvent) {
     console.log('Chatbox button clicked');
     if ((e.target as HTMLElement).closest('.copy-btn')) {
       console.log('Copy button clicked');
@@ -139,7 +139,7 @@ export default function ChatProvider({ children }: IContextProvider) {
         chatPayload,
         setChatPayload,
         sendChatPayload,
-        handleChatboxButtonClick,
+        handleChatboxClick,
       }}
     >
       {children}

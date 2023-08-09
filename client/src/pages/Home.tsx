@@ -4,18 +4,18 @@ import { useChatContext } from '../contexts/ChatContext';
 
 const Home: FC = () => {
   const location = useLocation();
-  const { handleChatboxButtonClick, messages, resetMessages, userInputRef } = useChatContext();
+  const { handleChatboxClick, messages, resetMessages, userInputRef } = useChatContext();
 
   useEffect(() => {
     // 1. Add an event listener on the chatbox
     const chatbox = document.getElementById('chatbox');
-    chatbox?.addEventListener('click', handleChatboxButtonClick);
+    chatbox?.addEventListener('click', handleChatboxClick);
     
     userInputRef.current?.focus();
 
     // Cleanup event listener
     return () => {
-      chatbox?.removeEventListener('click', handleChatboxButtonClick);
+      chatbox?.removeEventListener('click', handleChatboxClick);
     };
   }, [,messages]);
 
