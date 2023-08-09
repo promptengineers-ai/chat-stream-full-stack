@@ -37,7 +37,9 @@ export default function ChatProvider({ children }: IContextProvider) {
   };
 
   function handleChatboxButtonClick(e: MouseEvent) {
-    if ((e.target as HTMLElement).classList.contains('copy-btn')) {
+    console.log('Chatbox button clicked');
+    if ((e.target as HTMLElement).closest('.copy-btn')) {
+      console.log('Copy button clicked');
       // 2. Get the code content
       const preElement = (e.target as HTMLElement).closest('pre');
       const codeContent = preElement?.querySelector('code')?.innerText || '';
