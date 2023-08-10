@@ -140,7 +140,6 @@ export default function ChatProvider({ children }: IContextProvider) {
     return () => {
       chatbox?.removeEventListener('click', handleChatboxClick);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messages, userInputRef]);
 
   return (
