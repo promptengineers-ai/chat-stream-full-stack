@@ -13,7 +13,7 @@ templates = Jinja2Templates(directory="static")
 #######################################################################
 ###  Pages
 #######################################################################
-@router.get("/", tags=["Interface"])
+@router.get("/", tags=["Pages"])
 async def chat_interface(request: Request):
     """Serves the index page."""
     return templates.TemplateResponse(
@@ -21,7 +21,7 @@ async def chat_interface(request: Request):
         {"request": request, "current_page": "home"}
     )
 
-@router.get("/functions", tags=["Interface"])
+@router.get("/functions", tags=["Pages"])
 async def chat_functions_interface(request: Request):
     """Serves the index page."""
     return templates.TemplateResponse(
@@ -29,7 +29,7 @@ async def chat_functions_interface(request: Request):
         {"request": request, "current_page": "functions"}
     )
 
-@router.get("/agent", tags=["Interface"])
+@router.get("/agent", tags=["Pages"])
 async def chat_agent_interface(request: Request):
     """Serves the index page."""
     return templates.TemplateResponse(
@@ -37,7 +37,7 @@ async def chat_agent_interface(request: Request):
         {"request": request, "current_page": "agent"}
     )
 
-@router.get("/vectorstore", tags=["Interface"])
+@router.get("/vectorstore", tags=["Pages"])
 async def chat_vectorstore_interface(request: Request):
     """Serves the index page."""
     return templates.TemplateResponse(
