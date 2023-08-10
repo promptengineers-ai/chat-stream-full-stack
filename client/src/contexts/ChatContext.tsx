@@ -128,6 +128,7 @@ export default function ChatProvider({ children }: IContextProvider) {
     }
   }
 
+  
   useEffect(() => {
     // 1. Add an event listener on the chatbox
     const chatbox = document.getElementById('chatbox');
@@ -139,7 +140,8 @@ export default function ChatProvider({ children }: IContextProvider) {
     return () => {
       chatbox?.removeEventListener('click', handleChatboxClick);
     };
-  }, [,messages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages, userInputRef]);
 
   return (
     <ChatContext.Provider
