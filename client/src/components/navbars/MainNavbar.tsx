@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../../contexts/AppContext';
+import config from '../../config';
 
 
 export default function MainNavbar() {
@@ -51,8 +52,8 @@ export default function MainNavbar() {
               Docs
             </button>
             <ul className="dropdown-menu">
-              <li><a className="dropdown-item" href="http://localhost:8000/docs">Swagger</a></li>
-                <li><a className="dropdown-item" href="http://localhost:8000/redoc">Redoc</a></li>
+              <li><a className="dropdown-item" href={`${config.api.SERVER_URL}/docs`}>Swagger</a></li>
+                <li><a className="dropdown-item" href={`${config.api.SERVER_URL}/redoc`}>Redoc</a></li>
             </ul>
           </li>
         </ul>
