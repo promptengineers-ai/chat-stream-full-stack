@@ -26,7 +26,7 @@ async def chat_endpoint(body: Message):
     messages = body.messages or []
     # session_id = body.session_id
     logger.debug('[POST /chat] Query: %s', str(body))
-
+    
     return StreamingResponse(
         send_openai_message(
             messages,

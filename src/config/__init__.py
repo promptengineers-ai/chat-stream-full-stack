@@ -17,3 +17,6 @@ ALPACA_SECRET_KEY = os.getenv("ALPACA_SECRET_KEY", '')
 S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY", '')
 S3_SECRET_KEY = os.getenv("S3_SECRET_KEY", '')
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME", '')
+
+# MongoDB Credentials
+MONGO_CONNECTION = os.getenv("MONGO_CONNECTION", '')
