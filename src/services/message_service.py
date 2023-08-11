@@ -102,6 +102,7 @@ async def send_openai_message(
         temperature=temperature,
         streaming=True,
     )
+    print(response)
     for chunk in response:
         token = chunk['choices'][0]['delta'].get('content', '')
         yield token_stream(token)

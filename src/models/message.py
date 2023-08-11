@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 class Message(BaseModel): # pylint: disable=too-few-public-methods
     """A message to send to the chatbot."""
-    session_id: str = Field(...)
+    # session_id: str or None = Field(...)
     model: str = Field(...)
     messages: Any = Field(...)
     temperature: float or int = Field(...)
@@ -15,7 +15,7 @@ class Message(BaseModel): # pylint: disable=too-few-public-methods
         """A message to send to the chatbot."""
         json_schema_extra = {
             "example": {
-				"session_id": "1234567890",
+				# "session_id": "64d67f431d3232a7fed9ca06",
     			"model": "gpt-3.5-turbo",
        		 	"temperature": 0.8,	
                 "messages": [
