@@ -1,4 +1,5 @@
 import React from 'react';
+import HistoryDrawer from '../components/drawers/HistoryDrawer';
 import SideDrawer from '../components/drawers/SideDrawer';
 import MessageForm from '../components/forms/MessageForm';
 import MainNavbar from '../components/navbars/MainNavbar';
@@ -21,6 +22,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         }}
       >
         <SideDrawer />
+        <HistoryDrawer />
         {children}
       </main>
       

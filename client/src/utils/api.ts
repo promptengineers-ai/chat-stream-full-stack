@@ -183,6 +183,22 @@ export function sendLangchainVectorstoreChatMessage(
  * ----------------------------------------------------------
  * @returns 
  */
+export async function fetchHistoryList() {
+	return fetch(`${config.api.SERVER_URL}/chat/history`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+	})
+	.then(response => response.json())
+	.catch(error => console.error('Error:', error));
+}
+
+/**----------------------------------------------------------
+ * Create Chat History
+ * ----------------------------------------------------------
+ * @returns 
+ */
  export async function createChatHistory(
   payload: {
     model: string,
@@ -202,7 +218,7 @@ export function sendLangchainVectorstoreChatMessage(
 }
 
 /**----------------------------------------------------------
- * Retrieve the vectorstores from the server
+ * Update Chat History
  * ----------------------------------------------------------
  * @returns 
  */

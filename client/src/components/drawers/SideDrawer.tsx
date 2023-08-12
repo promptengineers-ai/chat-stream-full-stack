@@ -19,13 +19,13 @@ const SideDrawer: React.FC = () => {
   return (
     <>
       <button
-        className="btn btn-primary"
+        className="btn btn-primary btn-sm"
         style={{
           zIndex: 20,
           position: 'absolute',
-          bottom: '60%',
+          bottom: '8%',
           right: '0px',
-          border: '0',
+          border: 0,
           backgroundColor: '#5E35B1'
         }}
         onClick={() => open ? setOpen(false) : setOpen(true)}

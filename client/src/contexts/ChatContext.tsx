@@ -7,6 +7,7 @@ import {
   sendOpenAiFunctionChatMessage,
   createChatHistory,
   updateChatHistory,
+  fetchHistoryList,
 } from "../utils/api";
 import { useAppContext } from "./AppContext";
 import { useSourcesContext } from "./SourcesContext";
@@ -32,7 +33,7 @@ export default function ChatProvider({ children }: IContextProvider) {
   const [messages, setMessages] = useState([
     {role: 'system', content: ''},
   ]);
-
+  const [histories, setHistories] = useState([]);
   const resetMessages = () => {
     setMessages([
       {role: 'system', content: ''},
@@ -80,6 +81,11 @@ export default function ChatProvider({ children }: IContextProvider) {
     }
   }
 
+  async function updateHistories() {
+    const res = await fetchHistoryList();
+    setHistories(res.chats);
+  }
+
   async function updateCallback(streamMessages: {role: string, content: string}[]): Promise<void> {
     setMessages(streamMessages);
     setLoading(false);
@@ -98,6 +104,7 @@ export default function ChatProvider({ children }: IContextProvider) {
       })
       setChatPayload({...chatPayload, query: '' });
     }
+    updateHistories();
     userInputRef.current?.focus();
   }
 
@@ -171,6 +178,9 @@ export default function ChatProvider({ children }: IContextProvider) {
         setChatPayload,
         sendChatPayload,
         handleChatboxClick,
+        updateHistories,
+        histories,
+        setHistories,
       }}
     >
       {children}
