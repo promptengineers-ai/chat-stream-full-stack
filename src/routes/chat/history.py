@@ -139,7 +139,7 @@ async def update_chat_history(
 # Delete Chat History
 #################################################
 @router.delete(
-    "/chat/history{chat_id}",
+    "/chat/history/{chat_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     tags=["Chat History"]
 )

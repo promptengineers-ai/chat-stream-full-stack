@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import config from '../../config';
 import { useChatContext } from '../../contexts/ChatContext';
 import { truncate } from '../../utils';
+import { deleteChatHistory, updateChatHistory } from '../../utils/api';
 import { constructAssistantMessageDiv, constructUserMessageDiv } from '../../utils/chat';
 
 const HistoryDrawer: React.FC = () => {
@@ -9,7 +10,12 @@ const HistoryDrawer: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [edit, setEdit] = useState({
     id: '',
+    title: '',
     edit: false,
+  });
+  const [remove, setRemove] = useState({
+    id: '',
+    status: false,
   });
   
   function selectedCard(selected: boolean) {
@@ -97,7 +103,16 @@ const HistoryDrawer: React.FC = () => {
                     // console.log(newMessages)
                   }}
                 >
-                  {truncate(item.messages[1].content, 35)}
+                  {edit.edit && edit.id === item._id 
+                    ? (
+                      <input 
+                        type="text"  
+                        className="form-control-sm form-control" 
+                        onChange={(e) => setEdit({ ...edit, title: e.target.value })}
+                      /> 
+                    )
+                    : (item.title || truncate(item.messages[1].content, 35))
+                  }
                 </div>
                 <small style={{ color: 'gray'}}>
                 {new Intl.DateTimeFormat('default', {
@@ -112,29 +127,52 @@ const HistoryDrawer: React.FC = () => {
                 <small style={{ position: 'absolute', right: 5, top: 0, color: 'gray' }}>
                   {item.messages.length - 1} <span>messages</span>
                 </small>
-                {edit.edit && edit.id === item._id ? (
+                {edit.edit && edit.id === item._id || remove.status && remove.id === item._id ? (
+                  <>
                   <span 
                     onClick={() => {
-                      setEdit({ id: '', edit: false });
+                      setEdit({ id: '', title: '', edit: false });
+                      setRemove({ id: '', status: false });
                       // setOpen(false);
+                    }}
+                    className="float-right" 
+                    style={{ 
+                      bottom: 5, 
+                      right: 30, 
+                      position: 'absolute', 
+                      color: 'red',
+                      cursor: 'pointer'
+                    }}
+                  >
+                      <i className="fas fa-times"></i>
+                  </span>
+                  <span 
+                    onClick={() => {
+                      alert(`Updating ${item._id} with ${edit.title}`);
+                      // deleteChatHistory(item._id);
+                      
+                      updateChatHistory(item._id, { ...item, title: edit.title });
+                      updateHistories();
+                      setEdit({ title: '', id: '', edit: false });
+                      // setRemove({ id: '', status: false });
                     }}
                     className="float-right" 
                     style={{ 
                       bottom: 5, 
                       right: 5, 
                       position: 'absolute', 
-                      color: 'gray',
+                      color: 'green',
                       cursor: 'pointer'
                     }}
                   >
-                      <i className="fa fa-trash"></i>
+                      <i className="fa fa-check"></i>
                   </span>
+                </>
                 ) : (
                   <>
                     <span 
                       onClick={() => {
-                        setEdit({ id: item._id, edit: true });
-                        // setOpen(false);
+                        setEdit({ ...edit, id: item._id, edit: true });
                       }}
                       className="float-right" 
                       style={{ 
@@ -149,8 +187,7 @@ const HistoryDrawer: React.FC = () => {
                     </span>
                     <span 
                       onClick={() => {
-                        setEdit({ id: '', edit: false });
-                        // setOpen(false);
+                        setRemove({ id: item._id, status: true });
                       }}
                       className="float-right" 
                       style={{ 

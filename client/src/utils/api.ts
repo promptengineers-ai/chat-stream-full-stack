@@ -221,9 +221,10 @@ export async function fetchHistoryList() {
  export async function updateChatHistory(
   id: string,
   payload: {
-    model: string,
-    temperature: number,
-    messages: {role: string, content: string}[],
+    title?: string,
+    model?: string,
+    temperature?: number,
+    messages?: {role: string, content: string}[],
   },
  ) {
 	return fetch(`${config.api.SERVER_URL}/chat/history/${id}`, {
@@ -232,6 +233,22 @@ export async function fetchHistoryList() {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(payload)
+	})
+	.then(response => response.json())
+	.catch(error => console.error('Error:', error));
+}
+
+/**----------------------------------------------------------
+ * Update Chat History
+ * ----------------------------------------------------------
+ * @returns 
+ */
+ export async function deleteChatHistory(id: string) {
+	return fetch(`${config.api.SERVER_URL}/chat/history/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    }
 	})
 	.then(response => response.json())
 	.catch(error => console.error('Error:', error));

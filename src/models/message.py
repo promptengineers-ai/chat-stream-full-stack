@@ -1,14 +1,15 @@
 """ Message Model """
-from typing import Any
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
 
 class Message(BaseModel): # pylint: disable=too-few-public-methods
     """A message to send to the chatbot."""
-    model: str = Field(...)
-    messages: Any = Field(...)
-    temperature: float or int = Field(...)
+    title: Optional[str] = None
+    model: Optional[str] = None
+    messages: Optional[Any] = None
+    temperature: Optional[float or int] = None
 
     class Config: # pylint: disable=too-few-public-methods
         """A message to send to the chatbot."""
