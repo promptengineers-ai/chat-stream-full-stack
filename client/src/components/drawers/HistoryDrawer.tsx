@@ -3,12 +3,16 @@ import { useChatContext } from '../../contexts/ChatContext';
 import { truncate } from '../../utils';
 
 const HistoryDrawer: React.FC = () => {
-  const { histories, updateHistories } = useChatContext();
+  const { histories, updateHistories, chatPayload, setChatPayload, setMessages, messages } = useChatContext();
   const [open, setOpen] = useState<boolean>(false);
   const [edit, setEdit] = useState({
     id: '',
     edit: false,
   });
+  
+  function selectedCard(selected: boolean) {
+    return selected ? '#5E35B1' : 'rgb(23, 25, 35)'
+  }
 
   useEffect(() => {
     open ? updateHistories() : null;
@@ -60,13 +64,35 @@ const HistoryDrawer: React.FC = () => {
             <div 
               className="card mb-1" 
               key={item._id} 
-              style={{ background: 'rgb(23, 25, 35)', color: 'white' }}
+              style={{ background: selectedCard(chatPayload._id === item._id), color: 'white' }}
             >
               <div className="card-body" style={{ position: 'relative' }}>
-                {truncate(item.messages[1].content, 35)}<br/>
-                <small style={{ color: 'gray'}}>{item.updated_at}</small>
+                <div 
+                  style={{cursor: 'pointer'}} 
+                  onClick={() => {
+                    setChatPayload({
+                      ...chatPayload,
+                      _id: item._id,
+                      model: item.model,
+                      temperature: item.temperature,
+                    });
+                    setMessages(item.messages);
+                  }}
+                >
+                  {truncate(item.messages[1].content, 35)}
+                </div>
+                <small style={{ color: 'gray'}}>
+                {new Intl.DateTimeFormat('default', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                }).format(new Date(item.updated_at * 1000))}
+                </small>
                 <small style={{ position: 'absolute', right: 5, top: 0, color: 'gray' }}>
-                  {item.messages.length} <span>messages</span>
+                  {item.messages.length - 1} <span>messages</span>
                 </small>
                 {edit.edit && edit.id === item._id ? (
                   <span 
