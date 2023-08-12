@@ -9,6 +9,9 @@
 appEnv:
 appVersion:
 
+## Database
+mongoConnection:
+
 ## Keys
 openAiApiKey:
 promptLayerApiKey:
