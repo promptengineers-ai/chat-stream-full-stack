@@ -76,7 +76,7 @@ async def save_files(
     
 ######################################
 ##      Delete Vector Store
-###################################### 
+######################################
 @router.delete(
     "/files",
     status_code=status.HTTP_204_NO_CONTENT,
@@ -88,11 +88,11 @@ async def delete_file(
     try:
         ## Delete File
         s3 = StorageService(
-            S3_ACCESS_KEY, 
+            S3_ACCESS_KEY,
             S3_SECRET_KEY
         )
         s3.delete_file(
-            S3_BUCKET_NAME, 
+            S3_BUCKET_NAME,
             f'users/{TEST_USER_ID}/files/{prefix}'
         )
         return Response(status_code=204)

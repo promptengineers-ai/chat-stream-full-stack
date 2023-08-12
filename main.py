@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from src.routes.chat import router as chat_router
+from src.routes.chat.history import router as history_router
 from src.routes.files import router as files_router
 from src.routes.pages import router as pages_router
 from src.routes.vectorstores import router as vectorstores_router
@@ -34,4 +35,5 @@ app.add_middleware(
 app.include_router(pages_router)
 app.include_router(files_router)
 app.include_router(chat_router)
+app.include_router(history_router)
 app.include_router(vectorstores_router)

@@ -69,7 +69,7 @@ class TestHistoryService(unittest.IsolatedAsyncioTestCase):
             }
         }
         
-        history_list = await self.history_service.list()
+        history_list = await self.history_service.list_docs({})
         assert len(history_list) == 1
         
         read_one = await self.history_service.read_one({"_id": ObjectId(new_item.inserted_id)})
