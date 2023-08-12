@@ -48,6 +48,7 @@ helm -n $NAMESPACE upgrade -i --debug --wait --atomic \
 --set s3AccessKey=$S3_ACCESS_KEY \
 --set s3SecretKey=$S3_SECRET_KEY \
 --set s3BucketName=$S3_BUCKET_NAME \
+--set mongoConnection=$MONGO_CONNECTION \
 server ./k8s/charts
 
 echo ""

@@ -1,7 +1,9 @@
+"""Chat Streaming Routes"""
 import pickle
+import json
 from io import BytesIO
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response
 from fastapi.responses import StreamingResponse
 
 from src.config import S3_ACCESS_KEY, S3_BUCKET_NAME, S3_SECRET_KEY
@@ -24,9 +26,7 @@ router = APIRouter()
 async def chat_endpoint(body: Message):
     """Chat endpoint."""
     messages = body.messages or []
-    # session_id = body.session_id
     logger.debug('[POST /chat] Query: %s', str(body))
-
     return StreamingResponse(
         send_openai_message(
             messages,
@@ -36,12 +36,14 @@ async def chat_endpoint(body: Message):
         media_type="text/event-stream"
     )
 
+#################################################
+## Open AI Functions
+#################################################
 @router.post("/chat/stream/functions", tags=["Chat Stream"])
 async def chat_functions_endpoint(body: FunctionChatMessage):
     """Chat endpoint."""
     messages = body.messages or []
     functions = body.functions or []
-    # session_id = body.session_id
     logger.debug('[POST /chat] Query: %s', str(body))
 
     return StreamingResponse(
@@ -54,11 +56,13 @@ async def chat_functions_endpoint(body: FunctionChatMessage):
         media_type="text/event-stream"
     )
 
+#################################################
+## Langchain Agent
+#################################################
 @router.post("/chat/stream/agent", tags=["Chat Stream"])
 async def chat_agent_endpoint(body: Message):
     """Chat endpoint."""
     messages = body.messages or []
-    # session_id = body.session_id
     logger.debug('[POST /chat] Query: %s', str(body))
 
     return StreamingResponse(
@@ -66,17 +70,18 @@ async def chat_agent_endpoint(body: Message):
             messages,
             body.model,
             body.temperature
-        ),
+ 		),
         media_type="text/event-stream"
     )
-    
+
+#################################################
+## Langchain Context 
+#################################################
 @router.post("/chat/stream/vectorstore", tags=["Chat Stream"])
 async def chat_vectorstore_endpoint(body: VectorstoreChatMessage):
     """Chat endpoint."""
     messages = body.messages or []
-    # session_id = body.session_id
     logger.debug('[POST /chat] Query: %s', str(body))
-    
     # Retrieve the vectorstore
     s3_file = StorageService(
         S3_ACCESS_KEY,
@@ -87,17 +92,22 @@ async def chat_vectorstore_endpoint(body: VectorstoreChatMessage):
     )
     # Check if the retrieved file is empty
     if not s3_file:
-        raise HTTPException(status_code=404, detail="Vectorstore [%s] not found" % body.vectorstore)
-
+        raise HTTPException(
+            status_code=404,
+            detail="Vectorstore [%s] not found" % body.vectorstore
+        )
+    # Load Vectorstore
     with BytesIO(s3_file.read()) as file:
         vectorstore = pickle.load(file)
-        
+    # Process Query
     return StreamingResponse(
         send_vectorstore_message(
             messages,
             vectorstore,
             body.model,
             body.temperature,
-        ),
+		),
         media_type="text/event-stream"
     )
+
+    

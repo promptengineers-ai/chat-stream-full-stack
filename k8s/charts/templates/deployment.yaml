@@ -68,4 +68,6 @@ spec:
             value : {{ .Values.s3SecretKey }}
           - name: S3_BUCKET_NAME
             value : {{ .Values.s3BucketName }}
+          - name: MONGO_CONNECTION
+            value : {{ .Values.mongoConnection }}
           

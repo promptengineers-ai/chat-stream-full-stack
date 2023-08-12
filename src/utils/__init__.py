@@ -65,3 +65,12 @@ def match_strings(keys: list[str], functions):
     
     # Return the output array
     return output
+
+import json
+from bson import ObjectId
+
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
