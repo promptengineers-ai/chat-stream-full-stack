@@ -6,7 +6,6 @@ from pydantic import BaseModel, Field
 
 class Message(BaseModel): # pylint: disable=too-few-public-methods
     """A message to send to the chatbot."""
-    # session_id: str or None = Field(...)
     model: str = Field(...)
     messages: Any = Field(...)
     temperature: float or int = Field(...)
@@ -15,7 +14,6 @@ class Message(BaseModel): # pylint: disable=too-few-public-methods
         """A message to send to the chatbot."""
         json_schema_extra = {
             "example": {
-				# "session_id": "64d67f431d3232a7fed9ca06",
     			"model": "gpt-3.5-turbo",
        		 	"temperature": 0.8,	
                 "messages": [
@@ -29,7 +27,6 @@ class Message(BaseModel): # pylint: disable=too-few-public-methods
         
 class FunctionChatMessage(BaseModel): # pylint: disable=too-few-public-methods
     """A message to send to the chatbot."""
-    session_id: str = Field(...)
     model: str = Field(...)
     messages: Any = Field(...)
     temperature: float or int = Field(...)
@@ -39,7 +36,6 @@ class FunctionChatMessage(BaseModel): # pylint: disable=too-few-public-methods
         """A message to send to the chatbot."""
         schema_extra = {
             "example": {
-				"session_id": "1234567890",
     			"model": "gpt-3.5-turbo",
        		 	"temperature": 0.8,	
                 "messages": [
@@ -61,7 +57,6 @@ class VectorstoreChatMessage(Message): # pylint: disable=too-few-public-methods
         """A message to send to the chatbot."""
         json_schema_extra = {
             "example": {
-				"session_id": "1234567890",
                 "vectorstore": "formio.pkl",
     			"model": "gpt-3.5-turbo",
        		 	"temperature": 0.8,	

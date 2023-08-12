@@ -26,7 +26,6 @@ router = APIRouter()
 async def chat_endpoint(body: Message):
     """Chat endpoint."""
     messages = body.messages or []
-    # session_id = body.session_id
     logger.debug('[POST /chat] Query: %s', str(body))
     return StreamingResponse(
         send_openai_message(
@@ -45,7 +44,6 @@ async def chat_functions_endpoint(body: FunctionChatMessage):
     """Chat endpoint."""
     messages = body.messages or []
     functions = body.functions or []
-    # session_id = body.session_id
     logger.debug('[POST /chat] Query: %s', str(body))
 
     return StreamingResponse(
@@ -65,7 +63,6 @@ async def chat_functions_endpoint(body: FunctionChatMessage):
 async def chat_agent_endpoint(body: Message):
     """Chat endpoint."""
     messages = body.messages or []
-    # session_id = body.session_id
     logger.debug('[POST /chat] Query: %s', str(body))
 
     return StreamingResponse(
@@ -84,7 +81,6 @@ async def chat_agent_endpoint(body: Message):
 async def chat_vectorstore_endpoint(body: VectorstoreChatMessage):
     """Chat endpoint."""
     messages = body.messages or []
-    # session_id = body.session_id
     logger.debug('[POST /chat] Query: %s', str(body))
     # Retrieve the vectorstore
     s3_file = StorageService(
