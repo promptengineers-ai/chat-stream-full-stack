@@ -12,7 +12,7 @@ class HistoryService:
 
     async def list_docs(self, params: dict, limit=None) -> list:
         """Insert a new document into the collection."""
-        cursor = self.collection.find(params)
+        cursor = self.collection.find(params).sort("updated_at", -1)
 
         if limit:
             cursor = cursor.limit(limit)
