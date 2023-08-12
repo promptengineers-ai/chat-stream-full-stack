@@ -46,7 +46,6 @@ export async function getSources() {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ 
-      session_id: '2323d2', 
       messages: payload.messages,
       model: payload.model,
       temperature: payload.temperature,
@@ -83,8 +82,7 @@ export async function getSources() {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ 
-      session_id: '2323d2', 
+    body: JSON.stringify({  
       messages: payload.messages,
       model: payload.model,
       temperature: payload.temperature,
@@ -129,7 +127,6 @@ export function sendLangchainVectorstoreChatMessage(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ 
-      session_id: '2323d2', 
       messages: payload.messages, 
       vectorstore: payload.source,
       model: payload.model,
@@ -167,7 +164,6 @@ export function sendLangchainVectorstoreChatMessage(
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ 
-      session_id: '2323d2', 
       messages: payload.messages,
       model: payload.model,
       temperature: payload.temperature,

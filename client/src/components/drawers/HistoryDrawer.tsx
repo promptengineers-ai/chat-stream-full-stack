@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import config from '../../config';
 import { useChatContext } from '../../contexts/ChatContext';
 import { truncate } from '../../utils';
+import { constructAssistantMessageDiv, constructUserMessageDiv } from '../../utils/chat';
 
 const HistoryDrawer: React.FC = () => {
   const { histories, updateHistories, chatPayload, setChatPayload, setMessages, messages } = useChatContext();
@@ -77,6 +79,22 @@ const HistoryDrawer: React.FC = () => {
                       temperature: item.temperature,
                     });
                     setMessages(item.messages);
+                    let chatbox = document.getElementById('chatbox') as HTMLDivElement;
+                    chatbox.innerHTML = '';
+                    // let newMessages = []
+                    for (let i = 0; i < item.messages.length; i++) {
+                      if (item.messages[i].role === 'user') {
+
+                        let userMessageDiv = constructUserMessageDiv([item.messages[i]]);
+                        chatbox.appendChild(userMessageDiv);
+                      }
+                      if (item.messages[i].role === 'assistant') {
+                        let assistantMessageDiv = constructAssistantMessageDiv();
+                        assistantMessageDiv.innerHTML = config.marked.parse(item.messages[i].content);
+                        chatbox.appendChild(assistantMessageDiv);
+                      }
+                    }
+                    // console.log(newMessages)
                   }}
                 >
                   {truncate(item.messages[1].content, 35)}
