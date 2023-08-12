@@ -148,13 +148,18 @@ const HistoryDrawer: React.FC = () => {
                   </span>
                   <span 
                     onClick={() => {
-                      alert(`Updating ${item._id} with ${edit.title}`);
-                      // deleteChatHistory(item._id);
-                      
-                      updateChatHistory(item._id, { ...item, title: edit.title });
-                      updateHistories();
-                      setEdit({ title: '', id: '', edit: false });
-                      // setRemove({ id: '', status: false });
+                      if (remove.status) {
+                        alert(`Deleting ${item._id}`);
+                        deleteChatHistory(item._id);
+                        updateHistories();
+                        setRemove({ id: '', status: false });
+                      }
+                      if (edit.edit) {
+                        alert(`Updating ${item._id} with ${edit.title}`);
+                        updateChatHistory(item._id, { ...item, title: edit.title });
+                        updateHistories();
+                        setEdit({ title: '', id: '', edit: false });
+                      }
                     }}
                     className="float-right" 
                     style={{ 
