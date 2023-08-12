@@ -5,6 +5,8 @@ import {
   sendLangchainVectorstoreChatMessage, 
   sendOpenAiChatMessage,
   sendOpenAiFunctionChatMessage,
+  createChatHistory,
+  updateChatHistory,
 } from "../utils/api";
 import { useAppContext } from "./AppContext";
 import { useSourcesContext } from "./SourcesContext";
@@ -16,6 +18,7 @@ export default function ChatProvider({ children }: IContextProvider) {
   const { setLoading } = useAppContext();
   const { sources } = useSourcesContext();
   const [chatPayload, setChatPayload] = useState({
+    _id: '',
     systemMessage: 'You are a helpful assistant.',
     query: '',
     temperature: 0,
@@ -77,10 +80,24 @@ export default function ChatProvider({ children }: IContextProvider) {
     }
   }
 
-  function updateCallback(streamMessages: {role: string, content: string}[]): void {
+  async function updateCallback(streamMessages: {role: string, content: string}[]): Promise<void> {
     setMessages(streamMessages);
     setLoading(false);
-    setChatPayload({...chatPayload, query: ''});
+    if (!chatPayload._id) {
+      const history = await createChatHistory({
+        temperature: chatPayload.temperature,
+        model: chatPayload.model,
+        messages: streamMessages,
+      })
+      setChatPayload({...chatPayload, query: '', _id: history._id });
+    } else {
+      await updateChatHistory(chatPayload._id, {
+        temperature: chatPayload.temperature,
+        model: chatPayload.model,
+        messages: streamMessages,
+      })
+      setChatPayload({...chatPayload, query: '' });
+    }
     userInputRef.current?.focus();
   }
 

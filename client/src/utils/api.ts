@@ -177,3 +177,50 @@ export function sendLangchainVectorstoreChatMessage(
     readStreamResponse(response, payload.messages, chatbox, cb);   
   });
 }
+
+/**----------------------------------------------------------
+ * Retrieve the vectorstores from the server
+ * ----------------------------------------------------------
+ * @returns 
+ */
+ export async function createChatHistory(
+  payload: {
+    model: string,
+    temperature: number,
+    messages: {role: string, content: string}[],
+  },
+ ) {
+	return fetch(`${config.api.SERVER_URL}/chat/history`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload)
+	})
+	.then(response => response.json())
+	.catch(error => console.error('Error:', error));
+}
+
+/**----------------------------------------------------------
+ * Retrieve the vectorstores from the server
+ * ----------------------------------------------------------
+ * @returns 
+ */
+ export async function updateChatHistory(
+  id: string,
+  payload: {
+    model: string,
+    temperature: number,
+    messages: {role: string, content: string}[],
+  },
+ ) {
+	return fetch(`${config.api.SERVER_URL}/chat/history/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload)
+	})
+	.then(response => response.json())
+	.catch(error => console.error('Error:', error));
+}
