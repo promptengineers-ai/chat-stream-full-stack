@@ -12,7 +12,7 @@ if [ "$answer" == "yes" ]; then
     read version
     echo ""
     TAG=$version
-    HPA=true
+    HPA=false
     ENV_FILE=.env.production
     echo "You entered $TAG"
 elif [ "$answer" == "no" ]; then
